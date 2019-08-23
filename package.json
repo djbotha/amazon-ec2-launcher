@@ -1,0 +1,20 @@
+{
+  "name": "amazon-ec2-launcher",
+  "version": "0.0.1",
+  "dependencies": {
+    "@material-ui/core": "latest",
+    "next": "latest",
+    "prop-types": "latest",
+    "react": "^16.8.0",
+    "react-dom": "latest",
+    "styled-components": "latest"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "latest"
+  },
+  "scripts": {
+    "dev": "next -p 8080",
+    "build": "next build",
+    "start": "next start"
+  }
+}
