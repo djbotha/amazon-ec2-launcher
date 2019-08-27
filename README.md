@@ -8,13 +8,17 @@ This project is based on React [React](https://reactjs.org), and makes use of [s
 
 1.  Clone this repository
 
-    git clone git@github.com:djbotha/amazon-ec2-launcher.git
+```
+git clone git@github.com:djbotha/amazon-ec2-launcher.git
+```
 
 2.  Get started
 
-    cd amazon-ec2-launcher
-    npm install
-    npm run dev
+```
+cd amazon-ec2-launcher
+npm install
+npm run dev
+```
 
 You should see the landing page running at http://localhost:8080
 
@@ -23,7 +27,9 @@ You should see the landing page running at http://localhost:8080
 Your code needs to be linted before pushing it to our repository. To do that
 automatically:
 
-    cp $PWD/git-pre-push-hook.sh .git/hooks/pre-push
+```
+cp $PWD/git-pre-push-hook.sh .git/hooks/pre-push
+```
 
 Your code will now be linted each time you do a `git push` and if the linting fails,
 you'll get a chance to correct that before continuing.
@@ -32,18 +38,24 @@ you'll get a chance to correct that before continuing.
 
 1.  Start from the `dev` branch, and ensure your code is up to date
 
-    git checkout dev
-    git pull origin dev
+```
+git checkout dev
+git pull origin dev
+```
 
 2.  Create a new feature branch, e.g.
 
-    git checkout -b feature/landing-page-seo
+```
+git checkout -b feature/landing-page-seo
+```
 
 3.  Implement your changes to the code.
 
 4.  Push your feature branch to the shared repository
 
-    git push --set-upstream origin feature/landing-page-seo
+```
+git push --set-upstream origin feature/landing-page-seo
+```
 
 5.  Create a pull request, from your feature branch to the `dev` branch
 
