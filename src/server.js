@@ -16,7 +16,7 @@ app
     server.listen(8080, '0.0.0.0', (err) => {
       if (err) throw err;
 
-      process.stdout.write('Listening on 0.0.0.0:8080 ...\n');
+      process.stdout.write('Listening on http://localhost:8080 ...\n');
     });
   })
   .catch((ex) => {
