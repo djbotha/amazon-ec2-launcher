@@ -23,7 +23,7 @@ You should see the landing page running at http://localhost:8080
 Your code needs to be linted before pushing it to our repository. To do that
 automatically:
 
-    ln -s $PWD/git-pre-push-hook.sh .git/hooks/pre-push
+    cp $PWD/git-pre-push-hook.sh .git/hooks/pre-push
 
 Your code will now be linted each time you do a `git push` and if the linting fails,
 you'll get a chance to correct that before continuing.

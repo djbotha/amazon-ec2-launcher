@@ -2,8 +2,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import MuiLink from '@material-ui/core/Link';
-import Link from '../src/Link';
+import Link from '../components/Link';
 
 
 export default function About() {

@@ -3,18 +3,31 @@
   "version": "0.0.1",
   "dependencies": {
     "@material-ui/core": "latest",
+    "@material-ui/styles": "^4.3.3",
+    "clsx": "^1.0.4",
+    "express": "^4.17.1",
     "next": "latest",
+    "prettier": "^1.18.2",
     "prop-types": "latest",
     "react": "^16.8.0",
     "react-dom": "latest",
     "styled-components": "latest"
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "latest"
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-styled-components": "latest",
+    "eslint": "^6.2.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0"
   },
   "scripts": {
-    "dev": "next -p 8080",
+    "dev": "node src/server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint ./src",
+    "lint:fix": "yarn lint --fix"
   }
 }
