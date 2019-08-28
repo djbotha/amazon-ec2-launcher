@@ -4,6 +4,8 @@
 
 This project is based on React [React](https://reactjs.org), and makes use of [styled-components](https://styled-components.com/docs/api) for defining CSS in the same place as the components. [Next.js](https://nextjs.org/docs) is used for server-side rendering and directory-based routing structure, and linting is done with [ESLint](https://eslint.org/), using the Airbnb styleguide.
 
+Make sure you have Docker and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
+
 ## SETTING-UP LOCALLY
 
 1.  Clone this repository
@@ -16,11 +18,10 @@ git clone git@github.com:djbotha/amazon-ec2-launcher.git
 
 ```
 cd amazon-ec2-launcher
-npm install
-npm run dev
+docker-compose up
 ```
 
-You should see the landing page running at http://localhost:8080
+You should see the landing page running at http://localhost:8080. Any changes you make to your local code should also be updated inside the Docker container, and the page will be hot-reloaded thanks to NextJS.
 
 ## CODE STYLE
 

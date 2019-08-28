@@ -13,6 +13,8 @@
     "react-dom": "latest",
     "styled-components": "latest"
   },
+  "license": "ISC",
+  "repository": "github.com/djbotha/amazon-ec2-launcher",
   "devDependencies": {
     "babel-eslint": "^10.0.3",
     "babel-plugin-styled-components": "latest",
