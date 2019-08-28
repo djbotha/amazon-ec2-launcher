@@ -2,7 +2,7 @@
 
 ## IMPORTANT TOOLS
 
-This project is based on React [React](https://reactjs.org), and makes use of [styled-components](https://styled-components.com/docs/api) for defining CSS in the same place as the components. [Next.js](https://nextjs.org/docs) is used for server-side rendering and directory-based routing structure, and linting is done with [ESLint](https://eslint.org/), using the Airbnb styleguide.
+This project is based on [React](https://reactjs.org), and makes use of [styled-components](https://styled-components.com/docs/api) for defining CSS in the same place as the components. [Next.js](https://nextjs.org/docs) is used for server-side rendering and directory-based routing structure, and linting is done with [ESLint](https://eslint.org/), using the Airbnb styleguide.
 
 Make sure you have Docker and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
 
