@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@material-ui/core": "latest",
+    "@material-ui/icons": "^4.2.1",
     "@material-ui/styles": "^4.3.3",
     "clsx": "^1.0.4",
     "express": "^4.17.1",
