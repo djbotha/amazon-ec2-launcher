@@ -13,7 +13,7 @@ import ChooseAMI from '../components/ChooseAMI';
 import ChooseInstanceType from '../components/ChooseInstanceType';
 import ConfigureSecurityGroup from '../components/ConfigureSecurityGroup';
 
-export default function Index() {
+export default function DisplayAdvanced() {
   return (
     <Container maxWidth="lg">
       <ExpansionPanel>

@@ -10,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import ChooseAMI from '../components/ChooseAMI';
 import ChooseInstanceType from '../components/ChooseInstanceType';
 
-export default function Index() {
+export default function DisplayBeginner() {
   return (
     <Container maxWidth="lg">
       <ExpansionPanel>
