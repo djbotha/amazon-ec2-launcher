@@ -33,33 +33,6 @@ export default function Index() {
           <ChooseInstanceType />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Security">
-          <Typography>Configure Security Group</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <ConfigureSecurityGroup />
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Storage">
-          <Typography>Add Storage</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <AddStorage />
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Tags">
-          <Typography>Add Tags</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <AddTag />
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
     </Container>
   );
 }
