@@ -14,7 +14,7 @@ function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <Typography component="div" role="tabpanel" hidden={value !== index} id={`scrollable-auto-tabpanel-${index}`} aria-labelledby={`scrollable-auto-tab-${index}`} {...other}>
+    <Typography component="div" role="tabpanel" hidden={value !== index} {...other}>
       <Box p={3}>{children}</Box>
     </Typography>
   );
@@ -58,11 +58,9 @@ export default function ScrollableTabsButtonAuto() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <p>Beginner</p>
         <Beginner />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <p>Advanced</p>
         <Advanced />
       </TabPanel>
     </div>
