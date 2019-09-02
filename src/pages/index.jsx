@@ -24,72 +24,51 @@ export default function Index() {
   return (
     <Container maxWidth="lg">
       <Title>Amazon EC2 launch wizard</Title>
-      
+
       <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="AMI"
-        >
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="AMI">
           <Typography>Choose AMI</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <ChooseAMI />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      
+
       <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="Instance"
-        >
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Instance">
           <Typography>Choose Instance Type</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <ChooseInstanceType />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      
+
       <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="Security"
-        >
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Security">
           <Typography>Configure Security Group</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <ConfigureSecurityGroup />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      
+
       <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="Storage"
-        >
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Storage">
           <Typography>Add Storage</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <AddStorage />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      
+
       <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="Tags"
-        >
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Tags">
           <Typography>Add Tags</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <AddTag />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-    
     </Container>
   );
 }
