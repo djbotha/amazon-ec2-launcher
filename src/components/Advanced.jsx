@@ -7,11 +7,11 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Container from '@material-ui/core/Container';
 
-import AddStorage from '../components/AddStorage';
-import AddTag from '../components/AddTag';
-import ChooseAMI from '../components/ChooseAMI';
-import ChooseInstanceType from '../components/ChooseInstanceType';
-import ConfigureSecurityGroup from '../components/ConfigureSecurityGroup';
+import AddStorage from './AddStorage';
+import AddTag from './AddTag';
+import ChooseAMI from './ChooseAMI';
+import ChooseInstanceType from './ChooseInstanceType';
+import ConfigureSecurityGroup from './ConfigureSecurityGroup';
 
 export default function DisplayAdvanced() {
   return (

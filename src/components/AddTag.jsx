@@ -8,21 +8,20 @@ import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box';
 
 export default function AddTag() {
-    return (
-        <Box>
-        <Typography>Here you can add tags</Typography>
-        <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Key</TableCell>
-                    <TableCell align="right">Value</TableCell>
-                    <TableCell align="right">Instances</TableCell>
-                    <TableCell align="right">Volumes</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-            </TableBody>
-        </Table>
-        </Box>
-    )
+  return (
+    <Box>
+      <Typography>Here you can add tags</Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Key</TableCell>
+            <TableCell align="right">Value</TableCell>
+            <TableCell align="right">Instances</TableCell>
+            <TableCell align="right">Volumes</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody />
+      </Table>
+    </Box>
+  );
 }

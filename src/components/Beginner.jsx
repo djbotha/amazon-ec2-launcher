@@ -7,8 +7,8 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Container from '@material-ui/core/Container';
 
-import ChooseAMI from '../components/ChooseAMI';
-import ChooseInstanceType from '../components/ChooseInstanceType';
+import ChooseAMI from './ChooseAMI';
+import ChooseInstanceType from './ChooseInstanceType';
 
 export default function DisplayBeginner() {
   return (

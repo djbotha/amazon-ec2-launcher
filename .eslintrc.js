@@ -2,9 +2,9 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true,
+    node: true
   },
-  extends: ['airbnb'],
+  extends: ['airbnb', 'plugin:prettier/recommended'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -14,12 +14,12 @@ module.exports = {
     FormData: true,
     FileReader: true,
     Blob: true,
-    navigator: true,
+    navigator: true
   },
   parser: 'babel-eslint',
   parserOptions: {
     jsx: true,
-    useJSXTextNode: true,
+    useJSXTextNode: true
   },
   plugins: ['react', 'react-hooks'],
   rules: {
@@ -28,8 +28,8 @@ module.exports = {
     'react/jsx-filename-extension': [
       1,
       {
-        extensions: ['.jsx', '.tsx'],
-      },
+        extensions: ['.jsx', '.tsx']
+      }
     ],
     'no-underscore-dangle': 0,
     'import/imports-first': ['error', 'absolute-first'],
@@ -49,10 +49,10 @@ module.exports = {
       {
         components: ['Link'],
         specialLink: ['hrefLeft', 'hrefRight'],
-        aspects: ['invalidHref', 'preferButton'],
-      },
+        aspects: ['invalidHref', 'preferButton']
+      }
     ],
     'jsx-a11y/click-events-have-key-events': 0,
-    'jsx-a11y/no-static-element-interactions': 0,
-  },
+    'jsx-a11y/no-static-element-interactions': 0
+  }
 };
