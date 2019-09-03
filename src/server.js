@@ -13,13 +13,13 @@ app
 
     server.get('*', (req, res) => handle(req, res));
 
-    server.listen(8080, '0.0.0.0', (err) => {
+    server.listen(8080, '0.0.0.0', err => {
       if (err) throw err;
 
       process.stdout.write('Listening on http://localhost:8080 ...\n');
     });
   })
-  .catch((ex) => {
+  .catch(ex => {
     process.stderr.write(ex.stack);
     process.exit(1);
   });

@@ -18,22 +18,13 @@ git clone git@github.com:djbotha/amazon-ec2-launcher.git
 
 ```
 cd amazon-ec2-launcher
+docker-compose build
 docker-compose up
 ```
 
 You should see the landing page running at http://localhost:8080. Any changes you make to your local code should also be updated inside the Docker container, and the page will be hot-reloaded thanks to NextJS.
 
-## CODE STYLE
-
-Your code needs to be linted before pushing it to our repository. To do that
-automatically:
-
-```
-cp $PWD/git-pre-push-hook.sh .git/hooks/pre-push
-```
-
-Your code will now be linted each time you do a `git push` and if the linting fails,
-you'll get a chance to correct that before continuing.
+Whenever you install a new package, make sure to install it with `npm install <package-name>` and rebuild the frontend with `docker-compose build`.
 
 ## HOW TO CONTRIBUTE
 

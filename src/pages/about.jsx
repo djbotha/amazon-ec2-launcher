@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Link from '../components/Link';
 
-
 export default function About() {
   return (
     <Container maxWidth="sm">

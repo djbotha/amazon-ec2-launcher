@@ -5,9 +5,7 @@ import NextLink from 'next/link';
 import MuiLink from '@material-ui/core/Link';
 
 const NextComposed = React.forwardRef((props, ref) => {
-  const {
-    as, href, prefetch, children, ...other
-  } = props;
+  const { as, href, prefetch, children, ...other } = props;
 
   return (
     <NextLink href={href} prefetch={prefetch} as={as}>
@@ -21,35 +19,19 @@ const NextComposed = React.forwardRef((props, ref) => {
 // A styled version of the Next.js Link component:
 // https://nextjs.org/docs/#with-link
 function Link(props) {
-  const {
-    activeClassName,
-    router,
-    className: classNameProps,
-    innerRef,
-    naked,
-    ...other
-  } = props;
+  const { activeClassName, router, className: classNameProps, innerRef, naked, ...other } = props;
 
   const className = clsx(classNameProps, {
-    [activeClassName]: router.pathname === props.href && activeClassName,
+    [activeClassName]: router.pathname === props.href && activeClassName
   });
 
   if (naked) {
     return <NextComposed className={className} ref={innerRef} {...other} />;
   }
 
-  return (
-    <MuiLink
-      component={NextComposed}
-      className={className}
-      ref={innerRef}
-      {...other}
-    />
-  );
+  return <MuiLink component={NextComposed} className={className} ref={innerRef} {...other} />;
 }
 
 const RouterLink = withRouter(Link);
 
-export default React.forwardRef((props, ref) => (
-  <RouterLink {...props} innerRef={ref} />
-));
+export default React.forwardRef((props, ref) => <RouterLink {...props} innerRef={ref} />);
