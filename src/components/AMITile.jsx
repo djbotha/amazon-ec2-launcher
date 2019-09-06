@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { Box, Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, IconButton, Typography, Tooltip } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
 import { AddCircle, ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 
@@ -14,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '100%' // 16:9
+    paddingTop: '100%' // Square image
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -25,9 +24,6 @@ const useStyles = makeStyles(theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)'
-  },
-  avatar: {
-    backgroundColor: red[500]
   }
 }));
 
@@ -35,7 +31,8 @@ const FreeTier = styled(Box)({
   backgroundColor: '#ccff90',
   textAlign: 'center',
   padding: '0.33rem 0',
-  userSelect: 'none'
+  userSelect: 'none',
+  fontSize: '0.75rem'
 });
 
 export default function AMICard({ ami, expandAll }) {
