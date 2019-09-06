@@ -1,18 +1,20 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
+import { Typography } from '@material-ui/core';
 import styled from 'styled-components';
 
 import MyTabs from '../components/MyTabs';
 
-const Title = styled.h1`
-  color: red;
-  font-size: 50px;
+const Padding = styled.div`
+  padding: 2rem 0;
 `;
 
 export default function Index() {
   return (
     <Container maxWidth="lg">
-      <Title>Amazon EC2 launch wizard</Title>
+      <Padding>
+        <Typography variant="h3">Amazon EC2 launch wizard</Typography>
+      </Padding>
       <MyTabs />
     </Container>
   );
