@@ -19,7 +19,7 @@ export default function RadioButtonGroup({ options }) {
     <FormControl component="fieldset">
       <RadioGroup aria-label="architecture" name="architecture" value={selected} onChange={handleChange} row>
         {options.map(opt => (
-          <Label value={opt} control={<Radio />} label={opt} />
+          <Label value={opt} control={<Radio />} label={opt} key={opt} />
         ))}
       </RadioGroup>
     </FormControl>

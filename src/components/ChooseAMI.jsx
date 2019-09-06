@@ -16,7 +16,7 @@ export default function ChooseAMI() {
       <FormControlLabel control={<Switch checked={expandAll} onChange={handleExpand} value="expandAll" inputProps={{ 'aria-label': 'secondary checkbox' }} />} label="Expand All" />
       <Grid container spacing={3}>
         {AMIS.map(ami => (
-          <Grid item xs={4}>
+          <Grid item xs={4} key={ami.id}>
             <AMITile ami={ami} expandAll={expandAll} />
           </Grid>
         ))}
