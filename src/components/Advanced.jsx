@@ -16,7 +16,7 @@ import ConfigureSecurityGroup from './ConfigureSecurityGroup';
 export default function DisplayAdvanced() {
   return (
     <Container maxWidth="lg">
-      <ExpansionPanel>
+      <ExpansionPanel expanded>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="AMI">
           <Typography>Choose AMI</Typography>
         </ExpansionPanelSummary>

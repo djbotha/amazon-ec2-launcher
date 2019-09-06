@@ -39,7 +39,7 @@ class MyApp extends App {
     return (
       <>
         <Head>
-          <title>My page</title>
+          <title>Amazon EC2 Launch Wizard</title>
         </Head>
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}

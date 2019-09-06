@@ -1,0 +1,33 @@
+[
+    {
+        "id": 1,
+        "title": "Amazon Linux 2 AMI (HVM), SSD Volume Type",
+        "desc": "Amazon Linux 2 comes with five years support. It provides Linux kernel 4.14 tuned for optimal performance on Amazon EC2, systemd 219, GCC 7.3, Glibc 2.26, Binutils 2.29.1, and the latest software packages through extras.",
+        "cpu": "ami-0b69ea66ff7391e80 (64-bit x86) / ami-09c61c4850b7465cb (64-bit Arm)",
+        "cpus": [ "64-bit (x86)", "64-bit (Arm)"],
+        "root": "ebs",
+        "virtualizationType": "hvm",
+        "free": true,
+        "enaEnabled": true
+    },
+    {
+        "id": 2,
+        "title": "Amazon Linux 2 AMI (HVM), SSD Volume Type",
+        "desc": "Amazon Linux 2 comes with five years support. It provides Linux kernel 4.14 tuned for optimal performance on Amazon EC2, systemd 219, GCC 7.3, Glibc 2.26, Binutils 2.29.1, and the latest software packages through extras.",
+        "cpu": "ami-0b69ea66ff7391e80 (64-bit x86) / ami-09c61c4850b7465cb (64-bit Arm)",
+        "cpus": [ "64-bit (x86)", "64-bit (Arm)"],
+        "root": "ebs",
+        "virtualizationType": "hvm",
+        "enaEnabled": true
+    },
+    {
+        "id": 3,
+        "title": "Foo",
+        "desc": "Bar description",
+        "cpu": "ami-0b69ea66ff7391e80 (64-bit x86) / ami-09c61c4850b7465cb (64-bit Arm)",
+        "cpus": [ "64-bit (x86)"],
+        "root": "ebs",
+        "virtualizationType": "sadf",
+        "enaEnabled": false
+    }
+]
