@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { Box, Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, IconButton, Typography, Tooltip } from '@material-ui/core';
@@ -40,7 +40,7 @@ const FreeTier = styled(Box)({
 
 export default function AMICard({ ami, expandAll }) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(expandAll);
+  const [expanded, setExpanded] = useState(expandAll);
   const { title, desc, cpu, cpus, root, virtualizationType, enaEnabled, img, free } = ami;
 
   const handleExpandClick = () => {

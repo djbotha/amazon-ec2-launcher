@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ const Label = styled(FormControlLabel)({
 });
 
 export default function RadioButtonGroup({ options }) {
-  const [selected, setSelected] = React.useState(options[0]);
+  const [selected, setSelected] = useState(options[0]);
 
   const handleChange = event => {
     setSelected(event.target.value);

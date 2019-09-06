@@ -5,16 +5,12 @@ import styled from 'styled-components';
 
 import MyTabs from '../components/MyTabs';
 
-const Padding = styled.div`
-  padding: 2rem 0;
-`;
+const Padding = styled(Typography)({ padding: '2rem 0' });
 
 export default function Index() {
   return (
     <Container maxWidth="lg">
-      <Padding>
-        <Typography variant="h3">Amazon EC2 launch wizard</Typography>
-      </Padding>
+      <Padding variant="h3">Amazon EC2 launch wizard</Padding>
       <MyTabs />
     </Container>
   );
