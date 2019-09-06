@@ -6,7 +6,7 @@ import { red } from '@material-ui/core/colors';
 import { AddCircle, ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 
-import Switcher from './common/Switcher';
+import RadioButtons from './common/RadioButtonGroup';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -60,13 +60,12 @@ export default function AMICard({ ami, expandAll }) {
         <Typography variant="caption">{`Root device type: ${root} | Virtualization Type: ${virtualizationType} | ENA ${enaEnabled ? 'En' : 'Dis'}abled`}</Typography>
       </CardContent>
       <CardActions disableSpacing>
+        <RadioButtons options={cpus} />
         <Tooltip title="Select" placement="top">
           <IconButton aria-label="select">
             <AddCircle color="primary" />
           </IconButton>
         </Tooltip>
-
-        <Switcher options={cpus} />
 
         <IconButton
           className={clsx(classes.expand, {
