@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { Box, Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, IconButton, Typography, Tooltip } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
 import { AddCircle, ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 
@@ -12,9 +11,15 @@ const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 345
   },
+  title: {
+    fontSize: '1rem',
+    lineHeight: '1.33em',
+    height: '2.66em',
+    overflow: 'hidden'
+  },
   media: {
     height: 0,
-    paddingTop: '100%' // 16:9
+    paddingTop: '100%' // Square image
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -25,17 +30,18 @@ const useStyles = makeStyles(theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)'
-  },
-  avatar: {
-    backgroundColor: red[500]
   }
 }));
 
 const FreeTier = styled(Box)({
+  position: 'relative',
+  top: '-1rem',
+  marginBottom: '-28.53px',
   backgroundColor: '#ccff90',
   textAlign: 'center',
   padding: '0.33rem 0',
-  userSelect: 'none'
+  userSelect: 'none',
+  fontSize: '0.75rem'
 });
 
 export default function AMICard({ ami, expandAll }) {
@@ -53,7 +59,7 @@ export default function AMICard({ ami, expandAll }) {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={title} titleTypographyProps={{ variant: 'h5' }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
+      <CardHeader title={title} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
       <CardMedia className={classes.media} image={img || '/static/img/default_ami.png'} title={title} />
       {free && <FreeTier>Free Tier Elligible</FreeTier>}
       <CardContent>

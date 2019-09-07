@@ -28,6 +28,8 @@
         "cpus": [ "64-bit (x86)"],
         "root": "ebs",
         "virtualizationType": "sadf",
-        "enaEnabled": false
+        "enaEnabled": false,
+        "free": true
+
     }
 ]
