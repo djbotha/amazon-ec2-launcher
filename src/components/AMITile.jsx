@@ -11,6 +11,11 @@ const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 345
   },
+  title: {
+    lineHeight: '1.33em',
+    height: '2.66em',
+    overflow: 'hidden'
+  },
   media: {
     height: 0,
     paddingTop: '100%' // Square image
@@ -28,6 +33,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FreeTier = styled(Box)({
+  position: 'relative',
+  top: '-1rem',
+  marginBottom: '-28.53px',
   backgroundColor: '#ccff90',
   textAlign: 'center',
   padding: '0.33rem 0',
@@ -50,7 +58,7 @@ export default function AMICard({ ami, expandAll }) {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={title} titleTypographyProps={{ variant: 'h5' }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
+      <CardHeader title={title} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
       <CardMedia className={classes.media} image={img || '/static/img/default_ami.png'} title={title} />
       {free && <FreeTier>Free Tier Elligible</FreeTier>}
       <CardContent>
