@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 345
   },
   title: {
+    fontSize: '1rem',
     lineHeight: '1.33em',
     height: '2.66em',
     overflow: 'hidden'
