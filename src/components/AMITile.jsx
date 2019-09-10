@@ -6,6 +6,7 @@ import { AddCircle, ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 
 import RadioButtons from './common/RadioButtonGroup';
+import { useInstance } from '../context/InstanceContext';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   title: {
     fontSize: '1rem',
     lineHeight: '1.33em',
-    height: '2.66em',
+    height: '2.66em', // Force title to be two lines tall
     overflow: 'hidden'
   },
   media: {
@@ -45,6 +46,7 @@ const FreeTier = styled(Box)({
 });
 
 export default function AMICard({ ami, expandAll }) {
+  const { dispatch } = useInstance();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(expandAll);
   const { title, desc, cpu, cpus, root, virtualizationType, enaEnabled, img, free } = ami;
@@ -57,6 +59,10 @@ export default function AMICard({ ami, expandAll }) {
     setExpanded(expandAll);
   }, [expandAll]);
 
+  const handleSelectAMI = () => {
+    dispatch({ type: 'AMI', payload: { ami } });
+  };
+
   return (
     <Card className={classes.card}>
       <CardHeader title={title} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
@@ -68,7 +74,7 @@ export default function AMICard({ ami, expandAll }) {
       <CardActions disableSpacing>
         <RadioButtons options={cpus} />
         <Tooltip title="Select" placement="top">
-          <IconButton aria-label="select">
+          <IconButton aria-label="select" onClick={handleSelectAMI}>
             <AddCircle color="primary" />
           </IconButton>
         </Tooltip>
