@@ -87,14 +87,28 @@ function SelectGroup() {
 export default function ConfigureSecurityGroup() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const [lastStep, setLastStep] = useState(0);
   const steps = ['New Or Existing Group', 'Create Security Group', 'Select Security Group'];
-  function handleNext() {
-    setActiveStep(step => step + 1);
-  }
 
-  function handleBack() {
-    setActiveStep(step => step - 1);
-  }
+  const handleNext = () => {
+    setLastStep(activeStep);
+    setActiveStep(step => step + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(lastStep);
+    setLastStep(oldLastStep => (oldLastStep < activeStep ? oldLastStep - 1 : oldLastStep + 1));
+  };
+
+  const handleNew = () => {
+    setLastStep(0);
+    setActiveStep(1);
+  };
+
+  const handleExisting = () => {
+    setLastStep(0);
+    setActiveStep(2);
+  };
 
   return (
     <div className={classes.root}>
@@ -110,7 +124,7 @@ export default function ConfigureSecurityGroup() {
         })}
       </Stepper>
       <div className={classes.centered}>
-        {activeStep === 0 && <SelectOrNewGroup handleExisting={() => setActiveStep(2)} handleNew={() => setActiveStep(1)} />}
+        {activeStep === 0 && <SelectOrNewGroup handleExisting={handleExisting} handleNew={handleNew} />}
         {activeStep === 1 && <NewGroup />}
         {activeStep === 2 && <SelectGroup />}
         <div>
