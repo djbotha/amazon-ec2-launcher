@@ -16,7 +16,7 @@ import ConfigureSecurityGroup from './ConfigureSecurityGroup';
 export default function DisplayAdvanced() {
   return (
     <Container maxWidth="lg">
-      <ExpansionPanel expanded>
+      <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="AMI">
           <Typography>Choose AMI</Typography>
         </ExpansionPanelSummary>
@@ -34,7 +34,7 @@ export default function DisplayAdvanced() {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
-      <ExpansionPanel>
+      <ExpansionPanel expanded>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Security">
           <Typography>Configure Security Group</Typography>
         </ExpansionPanelSummary>
