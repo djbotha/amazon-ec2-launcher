@@ -84,10 +84,25 @@ function SelectGroup() {
   );
 }
 
+function getStep(index, handleExisting, handleNew) {
+  switch (index) {
+    case 0:
+      return <SelectOrNewGroup handleExisting={handleExisting} handleNew={handleNew} />;
+    case 1:
+      return <NewGroup />;
+    case 2:
+      return <SelectGroup />;
+    default:
+      return null;
+  }
+}
+
 export default function ConfigureSecurityGroup() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [lastStep, setLastStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
+
   const steps = ['New Or Existing Group', 'Create Security Group', 'Select Security Group'];
 
   const handleNext = () => {
@@ -103,19 +118,34 @@ export default function ConfigureSecurityGroup() {
   const handleNew = () => {
     setLastStep(0);
     setActiveStep(1);
+    setSkipped(new Set());
   };
 
   const handleExisting = () => {
     setLastStep(0);
     setActiveStep(2);
+    setSkipped(() => {
+      const newSkipped = new Set();
+      newSkipped.add(1);
+      console.log(newSkipped);
+      return newSkipped;
+    });
   };
 
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
-        {steps.map(label => {
+        {steps.map((label, idx) => {
           const stepProps = {};
           const labelProps = {};
+          if (idx === 1) {
+            labelProps.optional = <Typography variant="caption">Optional</Typography>;
+          }
+
+          if (skipped.has(idx)) {
+            stepProps.completed = skipped.has(idx) ? false : null;
+          }
+
           return (
             <Step key={label} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
@@ -124,9 +154,7 @@ export default function ConfigureSecurityGroup() {
         })}
       </Stepper>
       <div className={classes.centered}>
-        {activeStep === 0 && <SelectOrNewGroup handleExisting={handleExisting} handleNew={handleNew} />}
-        {activeStep === 1 && <NewGroup />}
-        {activeStep === 2 && <SelectGroup />}
+        {getStep(activeStep, handleExisting, handleNew)}
         <div>
           <Button disabled={activeStep === 0} onClick={handleBack}>
             Back
