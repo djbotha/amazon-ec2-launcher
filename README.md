@@ -6,6 +6,19 @@ This project is based on [React](https://reactjs.org), and makes use of [styled-
 
 Make sure you have Docker and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
 
+## SETTING-UP IAM USER
+
+An IAM user with appropriate roles is required to use the AWS APIs for the Launch Wizard. We will use the user's access key and secret when making API requests.
+
+1. Head over to the [IAM section](https://console.aws.amazon.com/iam/home) in the EC2 Console.
+2. Navigate to the _Users_ option and select _Add User_.
+3. Enter an appropriate username and allow _Programmatic access_.
+4. Under _Set Permissions_, select the _Attach existing policies directly_ option and choose the following policy names:
+    * `AmazonEC2ReadOnlyAccess`
+    * `AWSPriceListServiceFullAccess`
+5. Skip the next few steps and finish creating the user.
+6. Note the generated `Access key ID` and `Secret access key`, which will be required in the `.env` file as explained below.
+
 ## SETTING-UP LOCALLY
 
 1.  Clone this repository
@@ -15,6 +28,17 @@ git clone git@github.com:djbotha/amazon-ec2-launcher.git
 ```
 
 2.  Get started
+
+Create a file called `.env` in the project root and add the below two lines, replacing the
+placeholders with your IAM user's `Access key ID` and `Secret access key` as obtained above.
+*Be sure to keep this file outside of version control!*
+
+```
+ACCESS_KEY_ID=<Your access key ID>
+SECRET_ACCESS_KEY=<Your secret access key>
+```
+
+Next, launch it:
 
 ```
 cd amazon-ec2-launcher
