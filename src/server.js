@@ -152,7 +152,6 @@ apiApp.get('/services/:service', (req, res) => {
 // retrieve products for a specific service
 // eg. http://localhost:8081/services/AmazonEC2/products?location=EU%20(London)&instanceType=t3.nano
 apiApp.get('/services/:service/products', (req, res) => {
-  console.log(req.query);
   getAllProducts(req.params.service, req.query)
     .then(data => {
       res.status(200).json(data);
