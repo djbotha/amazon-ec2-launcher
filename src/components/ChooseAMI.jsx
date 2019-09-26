@@ -40,14 +40,14 @@ export default function ChooseAMI() {
   };
 
   useEffect(() => {
-    setAmis(AMIS.filter(ami => (freeTierOnly ? ami.free && ami : ami)));
-  }, [freeTierOnly]);
+    setAmis(AMIS.filter(ami => (freeTierOnly ? ami.free && ami : ami) && ami.title.indexOf(search) !== -1));
+  }, [freeTierOnly, search]);
 
   const filterAMIs = e => {
     setSearch(e.target.value);
     console.log(search);
     const filtered = AMIS.filter(ami => {
-      return ami.title.indexOf(e.target.value) !== -1;
+      return ami.title.indexOf(e.target.value) !== -1 && (freeTierOnly ? ami.free && ami : ami);
     });
     setAmis(filtered);
   };
