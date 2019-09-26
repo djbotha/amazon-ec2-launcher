@@ -1,14 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { FormControlLabel, Box, Grid, Switch } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
 import AMITile from './AMITile';
 
 import AMIS from '../static/ami';
-import Search from './Search';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
+  },
+  dense: {
+    marginTop: theme.spacing(2)
+  },
+  menu: {
+    width: 200
+  }
+}));
 
 export default function ChooseAMI() {
   const [amis, setAmis] = useState(AMIS);
   const [expandAll, setExpandAll] = useState(false);
   const [freeTierOnly, setFreeTierOnly] = useState(false);
+  const [search, setSearch] = useState('');
+  const classes = useStyles();
 
   const handleExpand = e => {
     setExpandAll(e.target.checked);
@@ -22,9 +43,31 @@ export default function ChooseAMI() {
     setAmis(AMIS.filter(ami => (freeTierOnly ? ami.free && ami : ami)));
   }, [freeTierOnly]);
 
+  const filterAMIs = e => {
+    setSearch(e.target.value);
+    console.log(search);
+    const filtered = AMIS.filter(ami => {
+      return ami.title.indexOf(e.target.value) !== -1;
+    });
+
+    setAmis(filtered);
+    console.log(filtered);
+  };
+
   return (
     <Box width="100%">
-      <Search />
+      <form className={classes.container} noValidate autoComplete="off">
+        <TextField
+          id="outlined-search"
+          label="Search for AMI"
+          type="search"
+          className={classes.textField}
+          margin="normal"
+          value={search}
+          variant="outlined"
+          onChange={filterAMIs}
+        />
+      </form>
       <FormControlLabel control={<Switch checked={expandAll} onChange={handleExpand} value="expandAll" inputProps={{ 'aria-label': 'secondary checkbox' }} />} label="Expand All" />
       <FormControlLabel
         control={<Switch checked={freeTierOnly} onChange={handleFreeTier} value="freeTierOnly" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
