@@ -49,9 +49,7 @@ export default function ChooseAMI() {
     const filtered = AMIS.filter(ami => {
       return ami.title.indexOf(e.target.value) !== -1;
     });
-
     setAmis(filtered);
-    console.log(filtered);
   };
 
   return (
