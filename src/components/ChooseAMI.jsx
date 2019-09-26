@@ -3,6 +3,7 @@ import { FormControlLabel, Box, Grid, Switch } from '@material-ui/core';
 import AMITile from './AMITile';
 
 import AMIS from '../static/ami';
+import Search from './Search';
 
 export default function ChooseAMI() {
   const [amis, setAmis] = useState(AMIS);
@@ -23,6 +24,7 @@ export default function ChooseAMI() {
 
   return (
     <Box width="100%">
+      <Search />
       <FormControlLabel control={<Switch checked={expandAll} onChange={handleExpand} value="expandAll" inputProps={{ 'aria-label': 'secondary checkbox' }} />} label="Expand All" />
       <FormControlLabel
         control={<Switch checked={freeTierOnly} onChange={handleFreeTier} value="freeTierOnly" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
