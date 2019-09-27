@@ -45,11 +45,6 @@ export default function ChooseAMI() {
 
   const filterAMIs = e => {
     setSearch(e.target.value);
-    console.log(search);
-    const filtered = AMIS.filter(ami => {
-      return ami.title.indexOf(e.target.value) !== -1 && (freeTierOnly ? ami.free && ami : ami);
-    });
-    setAmis(filtered);
   };
 
   return (
