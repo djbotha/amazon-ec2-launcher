@@ -215,7 +215,7 @@ function getStep(index, handleExisting, handleNew) {
 
 export default function ConfigureSecurityGroup() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const [lastStep, setLastStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
