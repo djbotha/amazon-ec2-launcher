@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   dense: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(1)
   },
   menu: {
     width: 200
@@ -35,18 +35,41 @@ const useStyles = makeStyles(theme => ({
 
 export default function AddTag() {
   const [tag, setTag] = useState('');
+  const [tags, showTags] = useState('');
   const classes = useStyles();
 
   const updateTag = e => {
     setTag(e.target.value);
-    console.log(e.target.value);
   };
+
+  function showTag() {
+    showTags(tag);
+  }
+  function removeTag() {
+    showTags('');
+  }
 
   return (
     <Box>
-      <Typography>Here you can add tags</Typography>
       <Table>
         <TableHead>
+          <TableRow>
+            <TableCell>
+              <form className={classes.container} noValidate autoComplete="off">
+                <TextField id="outlined-search" label="Add Tag" type="search" className={classes.textField} margin="normal" value={tag} variant="outlined" onChange={updateTag} />
+              </form>
+            </TableCell>
+            <TableCell>
+              <Button variant="contained" className={classes.button} onClick={showTag}>
+                Add Tag
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button variant="contained" className={classes.button} onClick={removeTag}>
+                Delete Tag
+              </Button>
+            </TableCell>
+          </TableRow>
           <TableRow>
             <TableCell>Key</TableCell>
             <TableCell align="right">Value</TableCell>
@@ -55,19 +78,7 @@ export default function AddTag() {
           </TableRow>
           <TableRow>
             <TableCell>
-              <form className={classes.container} noValidate autoComplete="off">
-                <TextField id="outlined-search" label="Add Tag" type="search" className={classes.textField} margin="normal" value={tag} variant="outlined" onChange={updateTag} />
-              </form>
-            </TableCell>
-            <TableCell>
-              <Button variant="contained" className={classes.button}>
-                Add Tag
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <Typography>{tag}</Typography>
+              <Typography>{tags}</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
