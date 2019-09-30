@@ -160,5 +160,23 @@
         "AESNI": false,
         "AVX": false,
         "turbo": false
+    },
+    {
+        "freeTier": true,
+        "family": "General",
+        "type": "t1.micro",
+        "ECUs": "Variable",
+        "vCPUs": 1,
+        "physicalProcessor": "Variable",
+        "clockSpeed": 2,
+        "memory": 5,
+        "instanceStorage": "EBS Only",
+        "EBSOptimizedAvailable": true,
+        "networkPerformance": "Up to 25 gigabit",
+        "IPv6": true,
+        "processorArchitecture": "64-bit (x86), 32-bit (x86)",
+        "AESNI": true,
+        "AVX": true,
+        "turbo": true
     }
 ]
