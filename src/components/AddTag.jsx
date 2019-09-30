@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import { Checkbox } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -34,19 +35,30 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function AddTag() {
-  const [tag, setTag] = useState('');
-  const [tags, showTags] = useState('');
+  const [key, setKey] = useState('');
+  const [val, setVal] = useState('');
+  const [keys, showKeys] = useState('');
+  const [vals, showVals] = useState('');
   const classes = useStyles();
+  const [checkboxes, showCheckboxes] = useState('');
 
   const updateTag = e => {
-    setTag(e.target.value);
+    setKey(e.target.value);
+  };
+
+  const updateVal = e => {
+    setVal(e.target.value);
   };
 
   function showTag() {
-    showTags(tag);
+    showKeys(key);
+    showVals(val);
+    showCheckboxes(<Checkbox />);
   }
   function removeTag() {
-    showTags('');
+    showKeys('');
+    showVals('');
+    showCheckboxes('');
   }
 
   return (
@@ -56,7 +68,12 @@ export default function AddTag() {
           <TableRow>
             <TableCell>
               <form className={classes.container} noValidate autoComplete="off">
-                <TextField id="outlined-search" label="Add Tag" type="search" className={classes.textField} margin="normal" value={tag} variant="outlined" onChange={updateTag} />
+                <TextField id="outlined-search" label="Key" type="search" className={classes.textField} margin="normal" value={key} variant="outlined" onChange={updateTag} />
+              </form>
+            </TableCell>
+            <TableCell>
+              <form className={classes.container} noValidate autoComplete="off">
+                <TextField id="outlined-search" label="Value" type="search" className={classes.textField} margin="normal" value={val} variant="outlined" onChange={updateVal} />
               </form>
             </TableCell>
             <TableCell>
@@ -78,8 +95,13 @@ export default function AddTag() {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>{tags}</Typography>
+              <Typography>{keys}</Typography>
             </TableCell>
+            <TableCell>
+              <Typography align="right">{vals}</Typography>
+            </TableCell>
+            <TableCell align="right">{checkboxes}</TableCell>
+            <TableCell align="right">{checkboxes}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody />
