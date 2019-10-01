@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   dense: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(1)
   },
   menu: {
     width: 200
