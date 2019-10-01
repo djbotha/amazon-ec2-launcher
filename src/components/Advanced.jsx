@@ -25,7 +25,7 @@ export default function DisplayAdvanced() {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
-      <ExpansionPanel expanded>
+      <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Instance">
           <Typography>Choose Instance Type</Typography>
         </ExpansionPanelSummary>
@@ -52,7 +52,7 @@ export default function DisplayAdvanced() {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
-      <ExpansionPanel expanded>
+      <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Tags">
           <Typography>Add Tags</Typography>
         </ExpansionPanelSummary>
