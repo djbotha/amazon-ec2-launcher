@@ -12,10 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Checkbox } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap'
-  },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1)
@@ -67,12 +63,12 @@ export default function AddTag() {
         <TableHead>
           <TableRow>
             <TableCell>
-              <form className={classes.container} noValidate autoComplete="off">
+              <form noValidate autoComplete="off">
                 <TextField id="outlined-search" label="Key" type="search" className={classes.textField} margin="normal" value={key} variant="outlined" onChange={updateTag} />
               </form>
             </TableCell>
             <TableCell>
-              <form className={classes.container} noValidate autoComplete="off">
+              <form noValidate autoComplete="off">
                 <TextField id="outlined-search" label="Value" type="search" className={classes.textField} margin="normal" value={val} variant="outlined" onChange={updateVal} />
               </form>
             </TableCell>
