@@ -33,10 +33,8 @@ const useStyles = makeStyles(theme => ({
 export default function AddTag() {
   const [key, setKey] = useState('');
   const [val, setVal] = useState('');
-  const [keys, showKeys] = useState('');
-  const [vals, showVals] = useState('');
+  const [tags, setTags] = useState([]);
   const classes = useStyles();
-  const [checkboxes, showCheckboxes] = useState('');
 
   const updateTag = e => {
     setKey(e.target.value);
@@ -47,14 +45,12 @@ export default function AddTag() {
   };
 
   function showTag() {
-    showKeys(key);
-    showVals(val);
-    showCheckboxes(<Checkbox />);
+    setTags([...tags, { id: tags.length, key, val }]);
+    setKey('');
+    setVal('');
   }
   function removeTag() {
-    showKeys('');
-    showVals('');
-    showCheckboxes('');
+    setTags(tags.slice(0, tags.length - 1));
   }
 
   return (
@@ -89,16 +85,22 @@ export default function AddTag() {
             <TableCell align="right">Instances</TableCell>
             <TableCell align="right">Volumes</TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell>
-              <Typography>{keys}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography align="right">{vals}</Typography>
-            </TableCell>
-            <TableCell align="right">{checkboxes}</TableCell>
-            <TableCell align="right">{checkboxes}</TableCell>
-          </TableRow>
+          {tags.map(tag => (
+            <TableRow key={tag.id}>
+              <TableCell>
+                <Typography>{tag.key}</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography align="right">{tag.val}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Checkbox />
+              </TableCell>
+              <TableCell align="right">
+                <Checkbox />
+              </TableCell>
+            </TableRow>
+          ))}
         </TableHead>
         <TableBody />
       </Table>
