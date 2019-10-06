@@ -98,7 +98,11 @@ function getAllAttributeValues(serviceCode, attributeName, _nextToken) {
 apiApp.get('/instanceTypes', (req, res) => {
   getAllAttributeValues('AmazonEC2', 'instanceType')
     .then(data => {
-      res.status(200).json(data);
+      const instanceTypes = [];
+      data.forEach(x => instanceTypes.push(x.Value));
+      res.status(200).json({
+        instanceTypes
+      });
     })
     .catch(error => {
       res.status(500).json(error);
