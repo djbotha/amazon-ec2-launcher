@@ -11,7 +11,7 @@ RUN npm install
 # Copying source files
 COPY src/ ./src
 
-EXPOSE 8080
+EXPOSE 8080 8081
 
 # Running the app
 ENTRYPOINT [ "npm", "run", "dev" ]
