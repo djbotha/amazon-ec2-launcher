@@ -177,6 +177,13 @@ apiApp.get('/services/:service/attributeValues/:attribute', (req, res) => {
     });
 });
 
+// status
+apiApp.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'ok'
+  });
+});
+
 // Open API server
 apiApp.listen(serverPort, '0.0.0.0', err => {
   if (err) throw err;
