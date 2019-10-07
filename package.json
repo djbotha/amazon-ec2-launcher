@@ -38,6 +38,7 @@
   },
   "scripts": {
     "dev": "node src/server.js",
+    "collector": "node src/collector/collector.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src/**/*.js src/**/*.jsx",
