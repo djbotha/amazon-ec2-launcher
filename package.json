@@ -15,6 +15,7 @@
     "prop-types": "latest",
     "react": "^16.8.0",
     "react-dom": "latest",
+    "request": "^2.88.0",
     "styled-components": "latest"
   },
   "license": "ISC",
@@ -37,6 +38,7 @@
   },
   "scripts": {
     "dev": "node src/server.js",
+    "collector": "node src/collector/collector.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src/**/*.js src/**/*.jsx",

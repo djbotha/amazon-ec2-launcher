@@ -34,15 +34,21 @@ placeholders with your IAM user's `Access key ID` and `Secret access key` as obt
 *Be sure to keep this file outside of version control!*
 
 ```
+API_SERVER_PREFIX=http://localhost
 ACCESS_KEY_ID=<Your access key ID>
 SECRET_ACCESS_KEY=<Your secret access key>
 ```
 
-Next, launch it:
+To launch the project, run:
 
 ```
-cd amazon-ec2-launcher
 docker-compose up
+```
+
+To run the collector to collect information on all instance types, run:
+
+```
+npm run collector
 ```
 
 You should see the landing page running at http://localhost:8080. Any changes you make to your local code should also be updated inside the Docker container, and the page will be hot-reloaded thanks to NextJS.
