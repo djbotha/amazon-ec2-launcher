@@ -15,7 +15,7 @@ const Modal = ({ isShowing, hide, ami, expandAll }) =>
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <ViewInstance ami={ami} expandAll={expandAll}></ViewInstance>
+              <ViewInstance ami={ami} expandAll={expandAll} />
             </div>
           </div>
         </React.Fragment>,

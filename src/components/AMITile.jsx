@@ -66,10 +66,6 @@ export default function AMICard({ ami, expandAll }) {
     dispatch({ type: 'AMI', payload: { ami } });
   };
 
-  const openDetails = () => {
-    console.log('clicked');
-  };
-
   return (
     <Card className={classes.card}>
       <CardHeader title={title} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
