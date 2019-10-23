@@ -44,13 +44,12 @@ request(serverAddress, (err, res, body) => {
       } else {
         const instanceType = instanceTypes[index];
         request(`${serverAddress}/instanceTypes/${instanceType}`, (err3, res3, body3) => {
-          process.stdout.write(`Fetched ${index + 1} of ${instanceTypes.length}: ${instanceType}\n`);
-
-          const instanceTypeBodyData = JSON.parse(body3);
+          const instanceTypeBody = JSON.parse(body3);
 
           // If data is available on a particular instance type
-          if (instanceTypeBodyData.length !== 0) {
-            const instanceData = instanceTypeBodyData[0];
+          if (instanceTypeBody.data.length !== 0) {
+            process.stdout.write(`Fetched ${index + 1} of ${instanceTypes.length}: ${instanceType}\n`);
+            const instanceData = instanceTypeBody.data[0];
 
             // Attempt to get the hourly price
             let onDemandHourlyPrice = null;
@@ -80,6 +79,8 @@ request(serverAddress, (err, res, body) => {
             };
 
             instanceTypesDetailed[instanceType] = instanceTypeData;
+          } else {
+            process.stdout.write(`No data for ${index + 1} of ${instanceTypes.length}: ${instanceType}\n`);
           }
           fetchInstanceType(index + 1);
         });
