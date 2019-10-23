@@ -150,7 +150,7 @@ apiApp.get('/securityGroups', (req, res) => {
     });
 });
 
-// Map EC2 `ToPort` ICMP types to names defined in RFC777
+// Map EC2 `ToPort` ICMP types to names defined in RFC1700
 const icmpTypesLookupTable = {
   '-1': 'All',
   '0': 'Echo reply',
