@@ -68,7 +68,7 @@ function getAllProducts(service, filters = [], _nextToken) {
 
         if (data.NextToken) {
           getAllProducts(service, filters, data.NextToken).then(dataRec => resolve(dataRec));
-        } else if (allProducts) {
+        } else {
           resolve(allProducts);
         }
       })
