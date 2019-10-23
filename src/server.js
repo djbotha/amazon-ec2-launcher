@@ -50,6 +50,7 @@ AWS.config.update({
   region: 'eu-west-2'
 });
 
+const ec2 = new AWS.EC2({ apiVersion: '2016-11-15' });
 const pricing = new AWS.Pricing({ region: 'us-east-1' }); // Pricing available at 'us-east-1', not 'eu-west-2'.
 
 // Recursively retrieve all pages of products
@@ -58,8 +59,7 @@ function getAllProducts(service, filters = [], _nextToken) {
     return { Field: f, Type: 'TERM_MATCH', Value: filters[f] };
   });
   let allProducts = [];
-
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     pricing
       .getProducts({ ServiceCode: service, NextToken: _nextToken, Filters: pricingFilters })
       .promise()
@@ -68,17 +68,20 @@ function getAllProducts(service, filters = [], _nextToken) {
 
         if (data.NextToken) {
           getAllProducts(service, filters, data.NextToken).then(dataRec => resolve(dataRec));
-        } else {
+        } else if (allProducts) {
           resolve(allProducts);
         }
+      })
+      .catch(err => {
+        reject(err);
       });
   });
 }
 
 // Recursively retrieve all pages of attribute values
-function getAllAttributeValues(serviceCode, attributeName, _nextToken) {
-  let allAttributeValues = [];
-  return new Promise(resolve => {
+function getAllAttributeValues(serviceCode, attributeName, _allAttributeValues = [], _nextToken) {
+  let allAttributeValues = _allAttributeValues;
+  return new Promise((resolve, reject) => {
     pricing
       .getAttributeValues({ ServiceCode: serviceCode, AttributeName: attributeName, NextToken: _nextToken })
       .promise()
@@ -86,45 +89,194 @@ function getAllAttributeValues(serviceCode, attributeName, _nextToken) {
         allAttributeValues = allAttributeValues.concat(data.AttributeValues);
 
         if (data.NextToken) {
-          getAllAttributeValues(serviceCode, attributeName, data.NextToken).then(dataRec => resolve(dataRec));
+          getAllAttributeValues(serviceCode, attributeName, allAttributeValues, data.NextToken).then(dataRec => resolve(dataRec));
         } else {
           resolve(allAttributeValues);
         }
+      })
+      .catch(err => {
+        reject(err);
       });
   });
 }
+
+// Recursively retrieve all pages of security groups
+function getAllSecurityGroups(_results = [], _nextToken) {
+  let results = _results;
+  return new Promise((resolve, reject) => {
+    ec2
+      .describeSecurityGroups({ NextToken: _nextToken })
+      .promise()
+      .then(data => {
+        results = results.concat(data.SecurityGroups);
+
+        if (data.NextToken) {
+          getAllAttributeValues(results, data.NextToken).then(dataRec => resolve(dataRec));
+        } else {
+          resolve(results);
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+// Get list of all security groups
+// eg. http://localhost:8081/securityGroups
+apiApp.get('/securityGroups', (req, res) => {
+  getAllSecurityGroups()
+    .then(securityGroupsData => {
+      if (securityGroupsData) {
+        const securityGroups = [];
+        securityGroupsData.forEach(securityGroup => {
+          securityGroups.push({
+            name: securityGroup.GroupName,
+            id: securityGroup.GroupId,
+            description: securityGroup.Description || ''
+          });
+        });
+        res.status(200).json({
+          success: true,
+          securityGroups
+        });
+      }
+    })
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        message: `Unable to load security groups.`
+      });
+    });
+});
+
+// Map EC2 `ToPort` ICMP types to names defined in RFC777
+const icmpTypesLookupTable = {
+  '-1': 'All',
+  '0': 'Echo reply',
+  '3': 'Destination unreachable',
+  '4': 'Source quench',
+  '5': 'Redirect',
+  '8': 'Echo',
+  '9': 'Router advertisement',
+  '10': 'Router selection',
+  '11': 'Time exceeded',
+  '12': 'Parameter problem',
+  '13': 'Timestamp',
+  '14': 'Timestamp reply',
+  '15': 'Information request',
+  '16': 'Information reply',
+  '17': 'Address mask request',
+  '18': 'Address mask reply',
+  '30': 'Traceroute'
+};
+
+// Get detailed information on a specific security group id
+// eg. http://localhost:8081/securityGroups/sg-01234567890123456
+apiApp.get('/securityGroups/:groupId', (req, res) => {
+  const params = { GroupIds: [req.params.groupId] };
+  ec2
+    .describeSecurityGroups(params)
+    .promise()
+    .then(data => {
+      if (data.SecurityGroups && data.SecurityGroups.length && data.SecurityGroups.length > 0) {
+        const securityGroup = data.SecurityGroups[0];
+        const rules = [];
+        if (securityGroup.IpPermissions) {
+          securityGroup.IpPermissions.forEach(rule => {
+            if (rule.IpRanges) {
+              rule.IpRanges.forEach(range => {
+                // TCP/UDP/ICMP
+                if (['tcp', 'udp', 'icmp'].includes(rule.IpProtocol)) {
+                  const isIcmp = rule.IpProtocol === 'icmp';
+                  let portRange;
+                  let icmpType;
+                  if (!isIcmp) {
+                    // Format port range, or a single port if both ports are the same
+                    portRange = rule.FromPort === rule.ToPort ? `${rule.FromPort}` : `${rule.FromPort}-${rule.ToPort}`;
+                  } else {
+                    // ICMP codes
+                    icmpType = icmpTypesLookupTable[`${rule.FromPort}`] || null;
+                    if (!icmpType) return; // Skip other ICMP types we haven't accounted for in the lookup table
+                  }
+                  rules.push({
+                    protocol: rule.IpProtocol,
+                    [isIcmp ? 'icmpType' : 'portRange']: isIcmp ? icmpType : portRange,
+                    cidrIp: range.CidrIp,
+                    description: range.Description || ''
+                  });
+                }
+                // All traffic
+                else if (rule.IpProtocol === '-1') {
+                  rules.push({
+                    protocol: 'all_traffic',
+                    cidrIp: range.CidrIp,
+                    description: range.Description || ''
+                  });
+                }
+              });
+            }
+          });
+        }
+        res.status(200).json({
+          success: true,
+          securityGroup: {
+            name: securityGroup.GroupName,
+            id: securityGroup.GroupId,
+            description: securityGroup.Description || '',
+            rules
+          }
+        });
+      }
+    })
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        message: `Unable to load security group ID \`${req.params.groupId}\`.`
+      });
+    });
+});
 
 // Get list of all raw instance types
 // eg. http://localhost:8081/instanceTypes
 apiApp.get('/instanceTypes', (req, res) => {
   getAllAttributeValues('AmazonEC2', 'instanceType')
     .then(data => {
-      const instanceTypes = [];
-      data.forEach(x => instanceTypes.push(x.Value));
       res.status(200).json({
-        instanceTypes
+        success: true,
+        instanceTypes: data.map(x => x.Value)
       });
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        message: `Unable to get instance types.`
+      });
     });
 });
 
 // Get data on a particular instance type
 // eg. http://localhost:8081/instanceTypes/t3.nano
 apiApp.get('/instanceTypes/:instanceType', (req, res) => {
+  // See https://stackoverflow.com/questions/47441719/what-does-runinstancessv00-under-lineitem-operation-mean-in-aws-billing-report
   getAllProducts('AmazonEC2', {
     instanceType: req.params.instanceType,
     location: 'EU (London)',
     capacitystatus: 'Used',
-    operation: 'RunInstances' // https://stackoverflow.com/questions/47441719/what-does-runinstancessv00-under-lineitem-operation-mean-in-aws-billing-report
+    operation: 'RunInstances'
     // operatingSystem: 'Linux'
   })
     .then(data => {
-      res.status(200).json(data);
+      res.status(200).json({
+        success: true,
+        data: data || []
+      });
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        message: `Unable to get instance type \`${req.params.instanceType}\`.`
+      });
     });
 });
 
@@ -132,9 +284,11 @@ apiApp.get('/instanceTypes/:instanceType', (req, res) => {
 // eg. http://localhost:8081/instanceTypesDetailed
 apiApp.get('/instanceTypesDetailed', (req, res) => {
   const instanceTypesDetailed = JSON.parse(fs.readFileSync('src/static/instance-types.json', 'utf8'));
-  res.status(200).json(instanceTypesDetailed); // re-stringify to ensure correct headers sent
+  instanceTypesDetailed.success = true;
+  res.status(200).json(instanceTypesDetailed);
 });
 
+/*
 // Get list of all locations
 // eg. http://localhost:8081/locations
 apiApp.get('/locations', (req, res) => {
@@ -142,10 +296,14 @@ apiApp.get('/locations', (req, res) => {
     .then(data => {
       res.status(200).json(data);
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        message: `Unable to get instance locations.`
+      });
     });
 });
+
 
 // Get details for a specific service
 // eg. http://localhost:8081/services/AmazonEC2
@@ -184,12 +342,11 @@ apiApp.get('/services/:service/attributeValues/:attribute', (req, res) => {
       res.status(500).json(error);
     });
 });
+*/
 
-// status
+// Status page
 apiApp.get('/', (req, res) => {
-  res.status(200).json({
-    status: 'ok'
-  });
+  res.status(200).json({ status: 'ok' });
 });
 
 // Open API server
