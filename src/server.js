@@ -310,7 +310,7 @@ apiApp.get('/amis/search/:searchQuery', (req, res) => {
       success: true,
       numResults: origResultsLength,
       startIndex: +req.query.startIndex,
-      count: +req.query.count,
+      count: results.length,
       results
     });
   }
