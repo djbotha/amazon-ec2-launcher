@@ -5,11 +5,61 @@ const express = require('express');
 const AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const glob = require('glob');
+const Fuse = require('fuse.js');
 
 const clientPort = 8080;
 const serverPort = 8081;
 
 process.stdout.write('Starting EC2 Launch Wizard...\n');
+
+// Load all community and quickstart AMIs from JSON files into memory
+process.stdout.write('Loading AMIs into memory...\n');
+
+let communityAmis = [];
+const communityAmiFiles = glob.sync('src/static/amis/community*.json');
+communityAmiFiles.forEach(fileName => {
+  const fileData = JSON.parse(fs.readFileSync(fileName));
+  communityAmis = communityAmis.concat(fileData.matchingAmis);
+});
+// Remove unneeded fields
+communityAmis = communityAmis.map(result => ({
+  name: result.name,
+  imageId: result.imageId64 || result.imageId,
+  description: result.description || '',
+  freeTier: false,
+  architecture: result.architecture,
+  platform: result.platform,
+  rootDeviceType: result.rootDeviceType,
+  rootDeviceName: result.rootDeviceName,
+  virtualizationType: result.virtualizationType,
+  enaSupport: result.enaSupport,
+  imageOwnerAlias: result.imageOwnerAlias,
+  imageLocation: result.imageLocation
+}));
+
+// Load quickstart AMIs
+let quickstartAmis = JSON.parse(fs.readFileSync('src/static/amis/quickstart.json')).amiList;
+
+// The quickstart AMIs have limited fields, so extract more fields
+// for each particular AMI from the more detailed community AMIs object.
+// Also, update the freeTier field in the community APIs with actual quickstart freeTier data.
+quickstartAmis = quickstartAmis.map(quickstartAmi => {
+  const imageId = quickstartAmi.imageId64 || quickstartAmi.imageId;
+  const communityAmiRef = communityAmis.filter(ami => ami.imageId === imageId)[0];
+  communityAmiRef.freeTier = quickstartAmi.freeTier;
+  return communityAmiRef;
+});
+
+// Create Fuse searcher instance for community APIs
+const fuseSearcher = new Fuse(communityAmis, {
+  keys: ['name', 'description', 'imageId'],
+  shouldSort: false,
+  caseSensitive: false,
+  threshold: 0.1
+});
+
+process.stdout.write(`Loaded ${communityAmis.length} community AMIs.\n`);
 
 const nextApp = next({ dir: __dirname, dev: true });
 const handle = nextApp.getRequestHandler();
@@ -235,6 +285,46 @@ apiApp.get('/securityGroups/:groupId', (req, res) => {
         message: `Unable to load security group ID \`${req.params.groupId}\`.`
       });
     });
+});
+
+// Get full list of basic "quickstart" AMIs
+// eg. http://localhost:8081/amis/quickstart
+apiApp.get('/amis/quickstart', (req, res) => {
+  res.status(200).json({
+    success: true,
+    numResults: quickstartAmis.length,
+    results: quickstartAmis
+  });
+});
+
+// Get AMIs that match a fuzzy search query, with optional pagination
+// eg. http://localhost:8081/amis/search/windows%20server
+apiApp.get('/amis/search/:searchQuery', (req, res) => {
+  let results = fuseSearcher.search(req.params.searchQuery);
+  const origResultsLength = results.length;
+
+  // If a count and startIndex are specified for pagination, paginate
+  if (req.query.count !== undefined && req.query.startIndex !== undefined) {
+    results = results.splice(+req.query.startIndex, +req.query.count);
+    res.status(200).json({
+      success: true,
+      numResults: origResultsLength,
+      startIndex: +req.query.startIndex,
+      count: +req.query.count,
+      results
+    });
+  }
+  // Show up to 100 results if no pagination query params specified
+  else {
+    results = results.splice(0, 100);
+    res.status(200).json({
+      success: true,
+      numResults: origResultsLength,
+      startIndex: 0,
+      count: results.length,
+      results
+    });
+  }
 });
 
 // Get list of all raw instance types
