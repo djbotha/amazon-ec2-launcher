@@ -299,19 +299,19 @@ apiApp.get('/amis/quickstart', (req, res) => {
 });
 
 // Get AMIs that match a fuzzy search query, with optional pagination
-// eg. http://localhost:8081/amis/search/windows%20server
+// eg. http://localhost:8081/amis/search/windows%20server?offset=0&limit=10
 apiApp.get('/amis/search/:searchQuery', (req, res) => {
   let results = fuseSearcher.search(req.params.searchQuery);
   const origResultsLength = results.length;
 
-  // If a count and startIndex are specified for pagination, paginate
-  if (req.query.count !== undefined && req.query.startIndex !== undefined) {
-    results = results.splice(+req.query.startIndex, +req.query.count);
+  // If `limit` and `offset` are specified for pagination, paginate
+  if (req.query.offset !== undefined && req.query.limit !== undefined) {
+    results = results.splice(+req.query.offset, +req.query.limit);
     res.status(200).json({
       success: true,
       numResults: origResultsLength,
-      startIndex: +req.query.startIndex,
-      count: results.length,
+      offset: +req.query.offset,
+      limit: results.length,
       results
     });
   }
@@ -321,8 +321,8 @@ apiApp.get('/amis/search/:searchQuery', (req, res) => {
     res.status(200).json({
       success: true,
       numResults: origResultsLength,
-      startIndex: 0,
-      count: results.length,
+      offset: 0,
+      limit: results.length,
       results
     });
   }
