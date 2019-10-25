@@ -25,7 +25,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChooseAMI() {
   const [amis, setAmis] = useState([]);
-  const [{ data }] = useAPI('/amis/quickstart');
+  const [{ data: quickstartData }] = useAPI('/amis/quickstart');
+  const [{ data: searchedData }, refetch] = useAPI(
+    {
+      url: '/amis/search',
+      method: 'GET'
+    },
+    { manual: true }
+  );
+
   const [expandAll, setExpandAll] = useState(false);
   const [freeTierOnly, setFreeTierOnly] = useState(false);
   const [search, setSearch] = useState('');
@@ -39,32 +47,55 @@ export default function ChooseAMI() {
     setFreeTierOnly(e.target.checked);
   };
 
-  // useEffect(() => {
-  //   setAmis(AMIS.filter(ami => (freeTierOnly ? ami.free && ami : ami) && ami.title.indexOf(search) !== -1));
-  // }, [freeTierOnly, search]);
-
   const filterAMIs = e => {
     setSearch(e.target.value);
+
+    // if (e.target.value.trim() !== '') {
+    //   // refetch({
+    //   //   url: `http://localhost:8081/amis/search/${e.target.value}`,
+    //   //   data: {
+    //   //     limit: 10,
+    //   //     offset: 0
+    //   //   }
+    //   // });
+    // } else if (quickstartData && quickstartData.data) {
+    //   setAmis(quickstartData.data);
+    // }
+  };
+
+  const searchForAMIs = e => {
+    e.preventDefault();
+    refetch({
+      url: `http://localhost:8081/amis/search/${search}`,
+      data: {
+        limit: 10,
+        offset: 0
+      }
+    });
   };
 
   useEffect(() => {
-    if (data && data.data) {
-      setAmis(data.data);
+    if (searchedData && searchedData.data) {
+      setAmis(searchedData.data);
+    } else if (quickstartData && quickstartData.data) {
+      setAmis(quickstartData.data);
     }
-  }, [data]);
+  }, [quickstartData, searchedData]);
   return (
     <Box width="100%">
       <form className={classes.container} noValidate autoComplete="off">
-        <TextField
-          id="outlined-search"
-          label="Search for AMI"
-          type="search"
-          className={classes.textField}
-          margin="normal"
-          value={search}
-          variant="outlined"
-          onChange={filterAMIs}
-        />
+        <form onSubmit={searchForAMIs}>
+          <TextField
+            id="outlined-search"
+            label="Search for AMI"
+            type="search"
+            className={classes.textField}
+            margin="normal"
+            value={search}
+            variant="outlined"
+            onChange={filterAMIs}
+          />
+        </form>
       </form>
       <FormControlLabel control={<Switch checked={expandAll} onChange={handleExpand} value="expandAll" inputProps={{ 'aria-label': 'secondary checkbox' }} />} label="Expand All" />
       <FormControlLabel
@@ -73,7 +104,7 @@ export default function ChooseAMI() {
       />
       <Grid container spacing={3}>
         {amis.map(ami => (
-          <Grid item xs={4} key={ami.id}>
+          <Grid item xs={4} key={ami.imageId}>
             <AMITile ami={ami} expandAll={expandAll} />
           </Grid>
         ))}

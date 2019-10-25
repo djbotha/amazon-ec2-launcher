@@ -301,6 +301,7 @@ apiApp.get('/amis/quickstart', (req, res) => {
 // Get AMIs that match a fuzzy search query, with optional pagination
 // eg. http://localhost:8081/amis/search/windows%20server?offset=0&limit=10
 apiApp.get('/amis/search/:searchQuery', (req, res) => {
+  process.stderr.write(`Searching for ${req.params}`);
   let results = fuseSearcher.search(req.params.searchQuery);
   const origResultsLength = results.length;
 
