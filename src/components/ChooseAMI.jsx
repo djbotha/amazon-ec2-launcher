@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChooseAMI() {
   const [amis, setAmis] = useState([]);
-  const [{ data: quickstartData }] = useAPI('/amis/quickstart');
+  const [{ data: quickstartData }] = useAPI('/amis/quickstart?offset=0&limit=50');
   const [{ data: searchedData }, refetch] = useAPI(
     {
       url: '/amis/search',
@@ -51,6 +51,7 @@ export default function ChooseAMI() {
     e.preventDefault();
 
     if (search.trim() === '') {
+      setAmis(quickstartData.data);
       return;
     }
 
