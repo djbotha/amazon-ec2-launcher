@@ -4,7 +4,7 @@ We have designed our own API gateway server which is used by the React client an
 The server is written in Node.js and runs on port 8081, in parallel with the React app on port 8080.
 
 As described in the [README](README.md), an IAM user with appropriate roles is required to use the AWS APIs for the Launch Wizard.
-We will use the user's access key and secret when making API requests.
+The server makes use of the IAM user's access key and secret when making AWS API requests.
 
 ## APIs
 
@@ -13,7 +13,7 @@ We will use the user's access key and secret when making API requests.
 GET `/instanceTypesDetailed`
 
 Lists all instance types, providing detailed information on each one including pricing.
-Instance types are sorted by On Demand hourly price, from from lowest to highest.
+Instance types are sorted by On Demand hourly price, from lowest to highest.
 
 #### Example
 
