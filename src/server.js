@@ -189,7 +189,7 @@ apiApp.get('/securityGroups', (req, res) => {
         });
         res.status(200).json({
           success: true,
-          securityGroups
+          data: securityGroups
         });
       }
     })
@@ -271,7 +271,7 @@ apiApp.get('/securityGroups/:groupId', (req, res) => {
         }
         res.status(200).json({
           success: true,
-          securityGroup: {
+          data: {
             name: securityGroup.GroupName,
             id: securityGroup.GroupId,
             description: securityGroup.Description || '',
@@ -294,7 +294,7 @@ apiApp.get('/amis/quickstart', (req, res) => {
   res.status(200).json({
     success: true,
     numResults: quickstartAmis.length,
-    results: quickstartAmis
+    data: quickstartAmis
   });
 });
 
@@ -312,7 +312,7 @@ apiApp.get('/amis/search/:searchQuery', (req, res) => {
       numResults: origResultsLength,
       offset: +req.query.offset,
       limit: results.length,
-      results
+      data: results
     });
   }
   // Show up to 100 results if no pagination query params specified
@@ -323,7 +323,7 @@ apiApp.get('/amis/search/:searchQuery', (req, res) => {
       numResults: origResultsLength,
       offset: 0,
       limit: results.length,
-      results
+      data: results
     });
   }
 });
@@ -337,7 +337,7 @@ apiApp.get('/instanceTypesDetailed', (req, res) => {
   res.status(200).json({
     success: true,
     numResults: instanceTypesDetailed.length,
-    instanceTypes: instanceTypesDetailed
+    data: instanceTypesDetailed
   });
 });
 
@@ -349,7 +349,7 @@ apiApp.get('/instanceTypes', (req, res) => {
       res.status(200).json({
         success: true,
         numResults: data.length,
-        instanceTypes: data.map(x => x.Value)
+        data: data.map(x => x.Value)
       });
     })
     .catch(() => {
