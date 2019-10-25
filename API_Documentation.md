@@ -9,12 +9,14 @@ We will use the user's access key and secret when making API requests.
 ## APIs
 
 ### List all instance types
+
 GET `/instanceTypesDetailed`
 
 Lists all instance types, providing detailed information on each one including pricing.
 Instance types are sorted by On Demand hourly price, from from lowest to highest.
 
 #### Example
+
 Request: [http://localhost:8081/instanceTypesDetailed](http://localhost:8081/instanceTypesDetailed)
 
 Response (excerpt, 133 others skipped):
@@ -44,11 +46,13 @@ Response (excerpt, 133 others skipped):
 ```
 
 ### List all Quickstart AMIs
+
 GET `/amis/quickstart`
 
 Gets a list of common "quickstart" AMIs, to be shown by default in the AMI list without a search query.
 
 #### Example
+
 Request: [http://localhost:8081/amis/quickstart](http://localhost:8081/amis/quickstart)
 
 Response (excerpt, 38 other results skipped):
@@ -77,11 +81,13 @@ Response (excerpt, 38 other results skipped):
 ```
 
 ### Search AMIs
+
 GET `/amis/search/<SEARCHTERM>?offset=<OFFSET>&limit=<LIMIT>`
 
 Returns AMIs for a particular search query. A fuzzy search takes place on the AMI name, description and ID fields, and pagination can be used by specifying `offset` and `limit` query parameters.
 
 #### Examples
+
 - List all AMIs with search query `ubuntu 18.04` (Note the URL encoding!): [http://localhost:8081/amis/search/ubuntu%2018.04](http://localhost:8081/amis/search/ubuntu%2018.04)
 - List first `10` AMIs with search query `windows server`: [http://localhost:8081/amis/search/windows%20server?offset=0&limit=10](http://localhost:8081/amis/search/windows%20server?offset=0&limit=10)
 - List `50` AMIs with search query `windows server`, starting at index `100`: [http://localhost:8081/amis/search/windows%20server?offset=100&limit=50](http://localhost:8081/amis/search/windows%20server?offset=100&limit=50)
@@ -126,11 +132,13 @@ Sample response from `http://localhost:8081/amis/search/ubuntu?offset=0&limit=2`
 ```
 
 ### List all security groups
+
 GET `/securityGroups`
 
 Gets a list of existing security groups along with basic information.
 
 #### Example
+
 Request: [http://localhost:8081/securityGroups](http://localhost:8081/securityGroups)
 
 Response:
@@ -163,11 +171,13 @@ Response:
 ```
 
 ### Get specific security group details
+
 GET `/securityGroups/<GROUP_ID>`
 
 Gets get detailed information on a specific security group ID, including all the rules associated with it.
 
 #### Specifications for security group rules:
+
 Fields available for each rule in a security group:
 - `protocol`: Either `tcp`, `udp`, `icmp`, or `all_traffic`. If the protocol is `all_traffic`, the fields `portRange` and `icmpType` are not provided as they are redundant.
 - `cidrIp`: The IP range to allow connections from, in CIDR notation. The range `0.0.0.0/0` allows all inbound connections, and ranges ending with `/32` specify a single IP address.
@@ -191,6 +201,7 @@ Fields available for each rule in a security group:
    - `Traceroute`
 
 #### Example
+
 Request to get further info and rules on a security group with ID `sg-08517873a6232f4fa`:
 [http://localhost:8081/securityGroups/sg-08517873a6232f4fa](http://localhost:8081/securityGroups/sg-08517873a6232f4fa)
 
