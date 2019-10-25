@@ -24,7 +24,7 @@ Response (excerpt, 133 others skipped):
 { 
     success:true,
     numResults:134,
-    instanceTypes:[ 
+    data:[ 
         { 
             instanceType:"t3a.nano",
             family:"Compute Instance",
@@ -60,7 +60,7 @@ Response (excerpt, 38 other results skipped):
 { 
     success:true,
     numResults:39,
-    results:[ 
+    data:[ 
         { 
             name:"amzn2-ami-hvm-2.0.20190823.1-x86_64-gp2",
             imageId:"ami-00a1270ce1e007c27",
@@ -100,7 +100,7 @@ Sample response from `http://localhost:8081/amis/search/ubuntu?offset=0&limit=2`
     numResults:8831,
     offset:0,
     limit:2,
-    results:[ 
+    data:[ 
         { 
             name:"ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20191002",
             imageId:"ami-0be057a22c63962cb",
@@ -145,7 +145,7 @@ Response:
 ```
 { 
     success:true,
-    securityGroups:[ 
+    data:[ 
         { 
             name:"ec2-launch-wizard",
             id:"sg-01801d64d07ad5547",
@@ -209,7 +209,7 @@ Response:
 ```
 { 
     success:true,
-    securityGroup:{ 
+    data:{ 
         name:"ec2-test-group",
         id:"sg-08517873a6232f4fa",
         description:"Launch wizard advanced test group",
