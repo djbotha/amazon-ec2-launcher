@@ -57,7 +57,7 @@ export default function ChooseAMI() {
     refetch({
       url: `http://localhost:8081/amis/search/${search}`,
       params: {
-        limit: 10,
+        limit: 9,
         offset: 0
       }
     });
