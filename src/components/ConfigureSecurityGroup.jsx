@@ -202,7 +202,7 @@ function SelectGroup() {
   if (loading) return <Loading />;
   if (error) return <Error error={error} />;
 
-  const sgs = data && data.securityGroups;
+  const sgs = data && data.data;
 
   return (
     <Box>
