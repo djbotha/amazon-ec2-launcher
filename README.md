@@ -53,6 +53,10 @@ npm run collector
 
 You should see the landing page running at http://localhost:8080. Any changes you make to your local code should also be updated inside the Docker container, and the page will be hot-reloaded thanks to NextJS.
 
+## API Documentation
+
+Documentation for our API gateway is available at [API_Documentation.md](API_Documentation.md).
+
 ## CODE STYLE
 
 Your code needs to be linted before pushing it to our repository. To do that
