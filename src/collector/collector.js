@@ -18,7 +18,7 @@ request(serverAddress, (err, res, body) => {
   process.stdout.write(`API server available, starting collector.\n`);
 
   // List all instance types
-  const instanceTypesDetailed = {};
+  const instanceTypesDetailed = [];
   process.stdout.write(`Requesting instance types...\n`);
   request(`${serverAddress}/instanceTypes`, (err2, res2, body2) => {
     const bodyInstanceTypes = JSON.parse(body2);
@@ -64,21 +64,21 @@ request(serverAddress, (err, res, body) => {
               }
             }
 
-            // Collect data
-            const instanceTypeData = {
-              instanceType,
-              family: instanceData.product.productFamily,
-              ecu: instanceData.product.attributes.ecu,
-              vcpu: instanceData.product.attributes.vcpu,
-              physicalProcessor: instanceData.product.attributes.physicalProcessor,
-              memory: instanceData.product.attributes.memory,
-              storage: instanceData.product.attributes.storage,
-              networkPerformance: instanceData.product.attributes.networkPerformance,
-              processorArchitecture: instanceData.product.attributes.processorArchitecture,
-              onDemandHourlyPrice
-            };
-
-            instanceTypesDetailed[instanceType] = instanceTypeData;
+            if (+onDemandHourlyPrice.value !== 0) {
+              // Collect data
+              instanceTypesDetailed.push({
+                instanceType,
+                family: instanceData.product.productFamily,
+                ecu: instanceData.product.attributes.ecu,
+                vcpu: instanceData.product.attributes.vcpu,
+                physicalProcessor: instanceData.product.attributes.physicalProcessor,
+                memory: instanceData.product.attributes.memory,
+                storage: instanceData.product.attributes.storage,
+                networkPerformance: instanceData.product.attributes.networkPerformance,
+                processorArchitecture: instanceData.product.attributes.processorArchitecture,
+                onDemandHourlyPrice
+              });
+            }
           } else {
             process.stdout.write(`No data for ${index + 1} of ${instanceTypes.length}: ${instanceType}\n`);
           }
