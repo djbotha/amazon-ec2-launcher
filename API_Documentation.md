@@ -9,11 +9,43 @@ We will use the user's access key and secret when making API requests.
 ## APIs
 
 ### List all instance types
+GET `/instanceTypesDetailed`
 
-#### Example request
-List all instance types, with details on each: [http://localhost:8081/instanceTypesDetailed](http://localhost:8081/instanceTypesDetailed)
+Lists all instance types, providing detailed information on each one including pricing.
+Instance types are sorted by On Demand hourly price, from from lowest to highest.
+
+#### Example
+Request: [http://localhost:8081/instanceTypesDetailed](http://localhost:8081/instanceTypesDetailed)
+
+Response (excerpt, 133 others skipped):
+```
+{ 
+    success:true,
+    numResults:134,
+    instanceTypes:[ 
+        { 
+            instanceType:"t3a.nano",
+            family:"Compute Instance",
+            ecu:"Variable",
+            vcpu:"2",
+            physicalProcessor:"AMD EPYC 7571",
+            memory:"0.5 GiB",
+            storage:"EBS only",
+            networkPerformance:"Low",
+            processorArchitecture:"64-bit",
+            onDemandHourlyPrice:{ 
+                currency:"USD",
+                value:"0.0053000000"
+            }
+        },
+        <133 others skipped>
+    ]
+}
+```
 
 ### List all Quickstart AMIs
+GET `/amis/quickstart`
+
 Gets a list of common "quickstart" AMIs, to be shown by default in the AMI list without a search query.
 
 #### Example
@@ -45,6 +77,8 @@ Response (excerpt, 38 other results skipped):
 ```
 
 ### Search AMIs
+GET `/amis/search/<SEARCHTERM>?offset=<OFFSET>&limit=<LIMIT>`
+
 Returns AMIs for a particular search query. A fuzzy search takes place on the AMI name, description and ID fields, and pagination can be used by specifying `offset` and `limit` query parameters.
 
 #### Examples
@@ -92,6 +126,8 @@ Sample response from `http://localhost:8081/amis/search/ubuntu?offset=0&limit=2`
 ```
 
 ### List all security groups
+GET `/securityGroups`
+
 Gets a list of existing security groups along with basic information.
 
 #### Example
@@ -126,7 +162,9 @@ Response:
 }
 ```
 
-### Get security group details
+### Get specific security group details
+GET `/securityGroups/<GROUP_ID>`
+
 Gets get detailed information on a specific security group ID, including all the rules associated with it.
 
 #### Specifications for security group rules:
