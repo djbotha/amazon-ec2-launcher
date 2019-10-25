@@ -3,9 +3,8 @@ import { FormControlLabel, Box, Grid, Switch } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
+import useAPI from '../hooks/useAPI';
 import AMITile from './AMITile';
-
-import AMIS from '../static/ami';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -25,7 +24,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ChooseAMI() {
-  const [amis, setAmis] = useState(AMIS);
+  const [amis, setAmis] = useState([]);
+  const [{ data }] = useAPI('/amis/quickstart');
   const [expandAll, setExpandAll] = useState(false);
   const [freeTierOnly, setFreeTierOnly] = useState(false);
   const [search, setSearch] = useState('');
@@ -39,14 +39,19 @@ export default function ChooseAMI() {
     setFreeTierOnly(e.target.checked);
   };
 
-  useEffect(() => {
-    setAmis(AMIS.filter(ami => (freeTierOnly ? ami.free && ami : ami) && ami.title.indexOf(search) !== -1));
-  }, [freeTierOnly, search]);
+  // useEffect(() => {
+  //   setAmis(AMIS.filter(ami => (freeTierOnly ? ami.free && ami : ami) && ami.title.indexOf(search) !== -1));
+  // }, [freeTierOnly, search]);
 
   const filterAMIs = e => {
     setSearch(e.target.value);
   };
 
+  useEffect(() => {
+    if (data && data.data) {
+      setAmis(data.data);
+    }
+  }, [data]);
   return (
     <Box width="100%">
       <form className={classes.container} noValidate autoComplete="off">

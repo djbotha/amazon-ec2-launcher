@@ -5,7 +5,7 @@ import { Box, Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, I
 import { AddCircle, ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 
-import RadioButtons from './common/RadioButtonGroup';
+// import RadioButtons from './common/RadioButtonGroup';
 import { useInstance } from '../context/InstanceContext';
 
 const useStyles = makeStyles(theme => ({
@@ -49,7 +49,7 @@ export default function AMICard({ ami, expandAll }) {
   const { dispatch } = useInstance();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(expandAll);
-  const { title, desc, cpu, cpus, root, virtualizationType, enaEnabled, img, free } = ami;
+  const { name, description, architecture, rootDeviceType, virtualizationType, enaSupport, freeTier } = ami;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -65,14 +65,13 @@ export default function AMICard({ ami, expandAll }) {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={title} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
-      <CardMedia className={classes.media} image={img || '/static/img/default_ami.png'} title={title} />
-      {free && <FreeTier>Free Tier Elligible</FreeTier>}
+      <CardHeader title={name} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={architecture} subheaderTypographyProps={{ variant: 'caption' }} />
+      <CardMedia className={classes.media} image="/static/img/default_ami.png" title={name} />
+      {freeTier && <FreeTier>Free Tier Elligible</FreeTier>}
       <CardContent>
-        <Typography variant="caption">{`Root device type: ${root} | Virtualization Type: ${virtualizationType} | ENA ${enaEnabled ? 'En' : 'Dis'}abled`}</Typography>
+        <Typography variant="caption">{`Root device type: ${rootDeviceType} | Virtualization Type: ${virtualizationType} | ENA ${enaSupport ? 'En' : 'Dis'}abled`}</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <RadioButtons options={cpus} />
         <Tooltip title="Select" placement="top">
           <IconButton aria-label="select" onClick={handleSelectAMI}>
             <AddCircle color="primary" />
@@ -93,7 +92,7 @@ export default function AMICard({ ami, expandAll }) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            {desc}
+            {description}
           </Typography>
         </CardContent>
       </Collapse>
