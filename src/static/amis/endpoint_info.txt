@@ -1,0 +1,13 @@
+The quickstart AMIs JSON file was obtained from
+https://eu-west-2.console.aws.amazon.com/ec2/ecb?call=getQuickstartList
+
+All ~41000 Community AMIs JSON files were obtained by making POSTs to
+https://eu-west-2.console.aws.amazon.com/ec2/ecb?call=searchAmis
+containing data
+{"nextToken":"0", "count":10000, "searchString":"", "platforms":[], "architectures":[], "region":"eu-west-2"}
+where `nextToken` was set to 0, 10000, 20000, 30000, and 40000 for each file.
+
+Many cookies and other headers were required, so Chrome's Developer Tools was
+able to generate a cURL request from the inspected requests made by the official
+EC2 Launch Wizard; the cURL requests were then manually modified where needed
+for the larger `count` and different values for `nextToken`.
