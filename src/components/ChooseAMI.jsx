@@ -47,27 +47,16 @@ export default function ChooseAMI() {
     setFreeTierOnly(e.target.checked);
   };
 
-  const filterAMIs = e => {
-    setSearch(e.target.value);
-
-    // if (e.target.value.trim() !== '') {
-    //   // refetch({
-    //   //   url: `http://localhost:8081/amis/search/${e.target.value}`,
-    //   //   data: {
-    //   //     limit: 10,
-    //   //     offset: 0
-    //   //   }
-    //   // });
-    // } else if (quickstartData && quickstartData.data) {
-    //   setAmis(quickstartData.data);
-    // }
-  };
-
   const searchForAMIs = e => {
     e.preventDefault();
+
+    if (search.trim() === '') {
+      return;
+    }
+
     refetch({
       url: `http://localhost:8081/amis/search/${search}`,
-      data: {
+      params: {
         limit: 10,
         offset: 0
       }
@@ -75,12 +64,12 @@ export default function ChooseAMI() {
   };
 
   useEffect(() => {
-    if (searchedData && searchedData.data) {
+    if (searchedData && searchedData.data && search.trim() !== '') {
       setAmis(searchedData.data);
     } else if (quickstartData && quickstartData.data) {
       setAmis(quickstartData.data);
     }
-  }, [quickstartData, searchedData]);
+  }, [quickstartData, search, searchedData]);
   return (
     <Box width="100%">
       <form className={classes.container} noValidate autoComplete="off">
@@ -93,7 +82,7 @@ export default function ChooseAMI() {
             margin="normal"
             value={search}
             variant="outlined"
-            onChange={filterAMIs}
+            onChange={e => setSearch(e.target.value)}
           />
         </form>
       </form>
