@@ -7,6 +7,10 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import Error from './common/Error';
+import Loading from './common/Loading';
+import useAPI from '../hooks/useAPI';
+
 const TYPES = ['Custom TCP Rule', 'Custom UPD Rule', 'Custom ICMP Rule - IPv4'];
 
 const useStyles = makeStyles(theme => ({
@@ -193,9 +197,20 @@ function NewGroup() {
 }
 
 function SelectGroup() {
+  const [{ data, error, loading }] = useAPI('/securityGroups');
+
+  if (loading) return <Loading />;
+  if (error) return <Error error={error} />;
+
+  const sgs = data && data.securityGroups;
+
   return (
     <Box>
-      <Typography>Select Group</Typography>
+      <Typography>
+        {sgs.map(sg => {
+          return JSON.stringify(sg);
+        })}
+      </Typography>
     </Box>
   );
 }

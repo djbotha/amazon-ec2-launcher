@@ -34,7 +34,7 @@ export default function DisplayAdvanced() {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
-      <ExpansionPanel>
+      <ExpansionPanel expanded>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Security">
           <Typography>Configure Security Group</Typography>
         </ExpansionPanelSummary>

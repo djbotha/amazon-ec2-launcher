@@ -1,5 +1,6 @@
 [
     {
+        "id": 1,
         "freeTier": false,
         "family": "General",
         "type": "t2.nano",
@@ -18,6 +19,7 @@
         "turbo": true
     },
     {
+        "id": 2,
         "freeTier": false,
         "family": "Compute",
         "type": "c5n.large",
@@ -36,6 +38,7 @@
         "turbo": true
     },
     {
+        "id": 3,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
@@ -54,6 +57,7 @@
         "turbo": false
     },
     {
+        "id": 4,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
@@ -72,6 +76,7 @@
         "turbo": false
     },
     {
+        "id": 5,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
@@ -90,6 +95,7 @@
         "turbo": false
     },
     {
+        "id": 6,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
@@ -108,6 +114,7 @@
         "turbo": false
     },
     {
+        "id": 7,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
@@ -126,6 +133,7 @@
         "turbo": true
     },
     {
+        "id": 8,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
@@ -144,6 +152,7 @@
         "turbo": false
     },
     {
+        "id": 9,
         "freeTier": false,
         "family": "General",
         "type": "t1.micro",
@@ -162,6 +171,7 @@
         "turbo": false
     },
     {
+        "id": 10,
         "freeTier": true,
         "family": "General",
         "type": "t1.micro",
