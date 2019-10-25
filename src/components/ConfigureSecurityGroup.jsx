@@ -202,7 +202,7 @@ function SelectGroup() {
   if (loading) return <Loading />;
   if (error) return <Error error={error} />;
 
-  const sgs = data && data.data;
+  const sgs = (data && data.data) || [];
 
   return (
     <Box>
@@ -258,7 +258,6 @@ export default function ConfigureSecurityGroup() {
     setSkipped(() => {
       const newSkipped = new Set();
       newSkipped.add(1);
-      console.log(newSkipped);
       return newSkipped;
     });
   };
