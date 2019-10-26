@@ -370,7 +370,6 @@ apiApp.post('/launchInstance', async (req, res) => {
     // Create the security group and get its ID
     const securityGroup = await ec2
       .createSecurityGroup({
-        DryRun: true,
         GroupName: body.securityGroup.name,
         Description: body.securityGroup.description,
         VpcId: defaultVpcId
@@ -446,12 +445,15 @@ apiApp.post('/launchInstance', async (req, res) => {
     }
 
     // Launch the instance
-    await ec2.runInstances(instanceLaunchParams).promise();
+    const launchResult = await ec2.runInstances(instanceLaunchParams).promise();
+    if (!launchResult || !launchResult.Instances || !launchResult.Instances[0] || !launchResult.Instances[0].InstanceId) throw new Error('Unable to launch instance.');
+    const instanceId = launchResult.Instances[0].InstanceId;
 
     res.status(200).json({
-      success: true
+      success: true,
+      instanceId
     });
-  } catch (err) {
+  } catch (err) { // thrown when any promise fails
     process.stdout.write('An error occured whilst launching an instance:\n');
     process.stdout.write(JSON.stringify(err || null));
     res.status(500).json({
