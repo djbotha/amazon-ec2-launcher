@@ -107,7 +107,7 @@ export default function ChooseInstanceType() {
         </TableHead>
         <TableBody>
           {instances.map(instance => (
-            <TableRow>
+            <TableRow key={instance.id}>
               <TableCell align="right">{instance.family}</TableCell>
               <TableCell align="right">{instance.type}</TableCell>
               <TableCell align="right">{instance.ECUs}</TableCell>
