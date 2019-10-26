@@ -280,3 +280,112 @@ Response:
     ]
 }
 ```
+
+### Launch an instance
+
+POST `/launchInstance` with JSON POST body sent as `application/json`.
+
+Launches an instance, along with creating its security group and adding specified tags.
+
+The security group is specified in exactly the same format as security groups returned by our security group API,
+but with the exclusion of the security group ID (as this will be generated automatically when the security group is created).
+
+It is mandatory to specify all fields except `volumes`, `instanceTags`, `volumeTags`.
+
+As specified by the AMI APIs, each AMI listing has a default device name (eg. `/dev/xvda`), used for the primary OS.
+If a volume is specified in the `volumes` section with this device name, it will override the default 8GiB volume that is
+created automatically. If no `volumes` are specified, this default 8GiB volume will be created and used and is deleted
+on termination.
+
+#### Example
+
+Request: [http://localhost:8081/launchInstance](http://localhost:8081/launchInstance)
+POST Body (`application/json`):
+```
+{
+    "instanceType": "t2.micro",
+    "imageId": "ami-00a1270ce1e007c27",
+    "keypairName": "EC2_keypair",
+    "securityGroup": {
+        "name": "new-instance-security-group",
+        "description": "Test of API",
+        "rules": [
+            {
+                "protocol": "icmp",
+                "icmpType": "Destination unreachable",
+                "cidrIp": "0.0.0.0/0",
+                "description": "ICMP Destination unreachable test"
+            },
+            {
+                "protocol": "icmp",
+                "icmpType": "Echo reply",
+                "cidrIp": "0.0.0.0/0",
+                "description": "ICMP Echo Reply test"
+            },
+            {
+                "protocol": "all_traffic",
+                "cidrIp": "0.0.0.0/0",
+                "description": "Allow all traffic"
+            },
+            {
+                "protocol": "udp",
+                "portRange": "25565",
+                "cidrIp": "3.9.1.19/32",
+                "description": "Minecraft only for single IP"
+            },
+            {
+                "protocol": "tcp",
+                "portRange": "80-84",
+                "cidrIp": "0.0.0.0/0",
+                "description": "HTTP on ports 80 to 84 open to the world"
+            },
+            {
+                "protocol": "tcp",
+                "portRange": "443",
+                "cidrIp": "0.0.0.0/0",
+                "description": "HTTPS on port 443"
+            },
+            {
+                "protocol": "icmp",
+                "icmpType": "Echo",
+                "cidrIp": "0.0.0.0/0",
+                "description": "ICMP Echo Request test"
+            }
+        ]
+    },
+    "instanceTags": [
+        {
+            "key": "Name",
+            "value": "joseph"
+        },
+        {
+            "key": "Department",
+            "value": "compsci"
+        }
+    ],
+    "volumeTags": [
+        {
+            "key": "Category",
+            "value": "general"
+        },
+        {
+            "key": "Food",
+            "value": "pizza"
+        }
+    ],
+    "volumes": [
+        {
+            "deviceName": "/dev/xvda",
+            "size": 12,
+            "deleteOnTermination": true
+        }
+    ]
+}
+```
+
+Response:
+```
+{ 
+    success:true
+}
+```
