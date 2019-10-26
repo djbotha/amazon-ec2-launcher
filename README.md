@@ -14,7 +14,7 @@ An IAM user with appropriate roles is required to use the AWS APIs for the Launc
 2. Navigate to the _Users_ option and select _Add User_.
 3. Enter an appropriate username and allow _Programmatic access_.
 4. Under _Set Permissions_, select the _Attach existing policies directly_ option and choose the following policy names:
-    * `AmazonEC2ReadOnlyAccess`
+    * `AmazonEC2FullAccess`
     * `AWSPriceListServiceFullAccess`
 5. Skip the next few steps and finish creating the user.
 6. Note the generated `Access key ID` and `Secret access key`, which will be required in the `.env` file as explained below.
