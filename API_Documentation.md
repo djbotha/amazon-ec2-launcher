@@ -259,3 +259,24 @@ Response:
     }
 }
 ```
+
+### List all key pairs
+
+GET `/keyPairs`
+
+Lists all of the user's key pair names, where one needs to be selected when launching an instance.
+
+#### Example
+
+Request: [http://localhost:8081/keyPairs](http://localhost:8081/keyPairs)
+
+Response:
+```
+{ 
+    success:true,
+    data:[ 
+        "Test_keypair",
+        "EC2_keypair"
+    ]
+}
+```
