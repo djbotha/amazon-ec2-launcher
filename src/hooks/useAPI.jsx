@@ -1,8 +1,26 @@
 import useAxios from 'axios-hooks';
 
-function useAPI(endpoint) {
-  const res = useAxios(`http://localhost:8081${endpoint}`);
-  return res;
+function useAPI(options, config = {}) {
+  const [{ data, error, loading }, refetch] = useAxios(
+    {
+      ...options,
+      url: `http://localhost:8081${options.url}`
+    },
+    {
+      ...config,
+      manual: !!config.manual
+    }
+  );
+
+  const refetchWrapper = props => {
+    const newProps = {
+      ...props,
+      url: `http://localhost:8081${props.url}`
+    };
+    return refetch(newProps);
+  };
+
+  return [{ data, error, loading }, refetchWrapper];
 }
 
 export default useAPI;
