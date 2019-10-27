@@ -13,14 +13,11 @@ import useAPI from '../hooks/useAPI';
 import { useInstance } from '../context/InstanceContext';
 import Sidebar from './Sidebar';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   root: {
     flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
   }
-}));
+});
 
 export default function DenseAppBar() {
   const [{ data, error, loading }, launchInstanceCall] = useAPI(
@@ -58,7 +55,7 @@ export default function DenseAppBar() {
       <Sidebar open={open} setOpen={setOpen} />
       <AppBar position="static">
         <Toolbar variant="dense">
-          <IconButton onClick={() => setOpen(true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton onClick={() => setOpen(true)} edge="start" color="inherit" aria-label="menu">
             {numKeys ? (
               <Badge badgeContent={numKeys} color="secondary">
                 <MenuIcon />
@@ -67,7 +64,7 @@ export default function DenseAppBar() {
               <MenuIcon />
             )}
           </IconButton>
-          <Typography variant="h6" color="inherit" className={classes.root}>
+          <Typography variant="h6" color="inherit" style={{ flex: 1 }}>
             Amazon EC2 Launch Wizard
           </Typography>
           <Button color="inherit" endIcon={<CheckCircleIcon />} onClick={launchInstance}>

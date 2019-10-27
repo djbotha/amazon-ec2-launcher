@@ -17,6 +17,7 @@
     "fuse.js": "^3.4.5",
     "glob": "^7.1.5",
     "lodash": "^4.17.15",
+    "material-ui-flat-pagination": "^4.0.0",
     "next": "latest",
     "prop-types": "latest",
     "react": "^16.8.0",
