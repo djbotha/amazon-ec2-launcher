@@ -105,7 +105,7 @@ export default function ChooseAMI() {
         control={<Switch checked={freeTierOnly} onChange={handleFreeTier} value="freeTierOnly" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
         label="Free Tier Only"
       />
-      <Grid container spacing={3}>
+      <Grid container>
         {amis.map(ami => (
           <Grid item xs={4} key={ami.imageId}>
             <AMITile ami={ami} expandAll={expandAll} />
