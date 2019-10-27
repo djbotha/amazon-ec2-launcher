@@ -4,7 +4,7 @@ function useAPI(options, config = {}) {
   const [{ data, error, loading }, refetch] = useAxios(
     {
       ...options,
-      url: `http://localhost:8081${options.url}`
+      url: `http://localhost:8081${options.url || options}`
     },
     {
       ...config,

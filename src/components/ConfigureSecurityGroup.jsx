@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { MenuItem, Table, TableHead, TableBody, TableRow, TableCell, Tooltip, TextField, Box } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { IconButton, MenuItem, Table, TableHead, TableBody, TableRow, TableCell, Tooltip, TextField, Box } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { makeStyles } from '@material-ui/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -225,21 +226,66 @@ function NewGroup() {
 }
 
 function SelectGroup() {
+  const { dispatch } = useInstance();
   const [{ data, error, loading }] = useAPI('/securityGroups');
+  const [{ data: detailedSG }, fetchSG] = useAPI(
+    {
+      url: '/securityGroups/idx',
+      method: 'GET'
+    },
+    {
+      manual: true
+    }
+  );
+
+  useEffect(() => {
+    if (detailedSG && detailedSG.data) {
+      dispatch({ type: 'SECURITY_GROUP', payload: { securityGroup: detailedSG.data } });
+    }
+  }, [detailedSG, dispatch]);
 
   if (loading) return <Loading />;
-  if (error) return <Error error={error} />;
+  if (error && error.message) return <Error error={error.message} />;
 
   const sgs = (data && data.data) || [];
 
+  const selectSecurityGroup = idx => {
+    fetchSG({ url: `/securityGroups/${idx}` });
+  };
+
   return (
-    <Box>
-      <Typography>
-        {sgs.map(sg => {
-          return JSON.stringify(sg);
-        })}
-      </Typography>
-    </Box>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            <Typography>ID</Typography>
+          </TableCell>
+          <TableCell>
+            <Typography>Name</Typography>
+          </TableCell>
+          <TableCell>
+            <Typography>Description</Typography>
+          </TableCell>
+          <TableCell>
+            <Typography>Select</Typography>
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {sgs.map(sg => (
+          <TableRow hover key={sg.id}>
+            <TableCell>{sg.id}</TableCell>
+            <TableCell>{sg.name}</TableCell>
+            <TableCell>{sg.description}</TableCell>
+            <TableCell>
+              <IconButton color="primary" onClick={() => selectSecurityGroup(sg.id)}>
+                <AddCircleIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
 
