@@ -11,9 +11,12 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import INSTANCES from '../static/instance';
+import Modal from './Modal';
+import useModal from './useModal';
 
 export default function ChooseInstanceType() {
   const [instances, setInstances] = useState(INSTANCES);
+  const { isShowing, toggle } = useModal();
   const [filters, setFilters] = useState({
     freeTier: false,
     turbo: false,
@@ -107,7 +110,8 @@ export default function ChooseInstanceType() {
         </TableHead>
         <TableBody>
           {instances.map(instance => (
-            <TableRow>
+            <TableRow onClick={toggle}>
+              <Modal isShowing={isShowing} hide={toggle} instance={instance} />
               <TableCell align="right">{instance.family}</TableCell>
               <TableCell align="right">{instance.type}</TableCell>
               <TableCell align="right">{instance.ECUs}</TableCell>

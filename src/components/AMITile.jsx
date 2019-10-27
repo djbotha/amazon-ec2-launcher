@@ -7,8 +7,6 @@ import styled from 'styled-components';
 
 import RadioButtons from './common/RadioButtonGroup';
 import { useInstance } from '../context/InstanceContext';
-import Modal from './Modal';
-import useModal from './useModal';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -52,7 +50,6 @@ export default function AMICard({ ami, expandAll }) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(expandAll);
   const { title, desc, cpu, cpus, root, virtualizationType, enaEnabled, img, free } = ami;
-  const { isShowing, toggle } = useModal();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -69,12 +66,11 @@ export default function AMICard({ ami, expandAll }) {
   return (
     <Card className={classes.card}>
       <CardHeader title={title} titleTypographyProps={{ variant: 'h5', className: classes.title }} subheader={cpu} subheaderTypographyProps={{ variant: 'caption' }} />
-      <CardMedia className={classes.media} image={img || '/static/img/default_ami.png'} title={title} onClick={toggle} />
+      <CardMedia className={classes.media} image={img || '/static/img/default_ami.png'} title={title} />
       {free && <FreeTier>Free Tier Elligible</FreeTier>}
       <CardContent>
         <Typography variant="caption">{`Root device type: ${root} | Virtualization Type: ${virtualizationType} | ENA ${enaEnabled ? 'En' : 'Dis'}abled`}</Typography>
       </CardContent>
-      <Modal isShowing={isShowing} hide={toggle} ami={ami} expandAll={expandAll} />
       <CardActions disableSpacing>
         <RadioButtons options={cpus} />
         <Tooltip title="Select" placement="top">
