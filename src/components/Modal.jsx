@@ -7,13 +7,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = 50;
+  const left = 50;
 
   return {
     top: `${top}%`,
@@ -26,6 +22,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
     width: 1200,
+    height: 300,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -35,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function SimpleModal({ isShowing, instance }) {
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(isShowing);
 
@@ -50,7 +46,7 @@ export default function SimpleModal({ isShowing, instance }) {
   return (
     <div>
       <button type="button" onClick={handleOpen}>
-        Open Modal
+        &gt;
       </button>
       <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={open} onClose={handleClose}>
         <div style={modalStyle} className={classes.paper}>
@@ -84,7 +80,7 @@ export default function SimpleModal({ isShowing, instance }) {
               </TableRow>
             </TableBody>
           </Table>
-          <SimpleModal instance={instance} />
+          <button type="button">Select</button>
         </div>
       </Modal>
     </div>

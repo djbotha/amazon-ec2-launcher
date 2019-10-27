@@ -111,7 +111,6 @@ export default function ChooseInstanceType() {
         <TableBody>
           {instances.map(instance => (
             <TableRow onClick={toggle}>
-              <Modal isShowing={isShowing} hide={toggle} instance={instance} />
               <TableCell align="right">{instance.family}</TableCell>
               <TableCell align="right">{instance.type}</TableCell>
               <TableCell align="right">{instance.ECUs}</TableCell>
@@ -122,6 +121,7 @@ export default function ChooseInstanceType() {
               <TableCell align="right">{instance.instanceStorage}</TableCell>
               <TableCell align="right">{instance.networkPerformance}</TableCell>
               <TableCell align="right">{instance.processorArchitecture}</TableCell>
+              <Modal isShowing={isShowing} hide={toggle} instance={instance} />
             </TableRow>
           ))}
         </TableBody>
