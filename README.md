@@ -34,6 +34,7 @@ placeholders with your IAM user's `Access key ID` and `Secret access key` as obt
 *Be sure to keep this file outside of version control!*
 
 ```
+REGION=eu-west-2
 API_SERVER_PREFIX=http://localhost
 ACCESS_KEY_ID=<Your access key ID>
 SECRET_ACCESS_KEY=<Your secret access key>

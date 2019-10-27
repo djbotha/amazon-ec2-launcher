@@ -285,7 +285,7 @@ Response:
 
 POST `/launchInstance` with JSON POST body sent as `application/json`.
 
-Launches an instance, along with creating its security group and adding specified tags.
+Launches an instance, along with creating its security group and adding specified tags. Returns the instance ID of the newly created instance.
 
 The security group is specified in exactly the same format as security groups returned by our security group API,
 but with the exclusion of the security group ID (as this will be generated automatically when the security group is created).
@@ -297,7 +297,7 @@ If a volume is specified in the `volumes` section with this device name, it will
 created automatically. If no `volumes` are specified, this default 8GiB volume will be created and used and is deleted
 on termination.
 
-For each volume volume, the `type` field can be:
+For each volume, the `type` field can be:
 - `gp2` (General Purpose SSD, default)
 - `standard` (Magnetic)
 - `st1` (Throughput Optimized HDD)
@@ -392,7 +392,8 @@ POST Body (`application/json`):
 
 Response:
 ```
-{ 
-    success:true
+{
+    success:true,
+    instanceId: "i-02753ac1daf3abdcf"
 }
 ```
