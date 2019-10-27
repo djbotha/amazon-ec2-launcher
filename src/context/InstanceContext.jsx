@@ -11,10 +11,10 @@ const InstanceContext = createContext();
 function reducer(state, action) {
   switch (action.type) {
     case 'AMI': {
-      const { ami } = action.payload;
+      const { imageId } = action.payload;
       const newState = {
         ...state,
-        ami
+        imageId
       };
       console.log(newState);
       return newState;
