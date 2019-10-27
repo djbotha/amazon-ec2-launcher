@@ -26,11 +26,12 @@ const HBox = styled.div`
   display: flex;
   flex-direction: row;
   margin: 1rem;
-  text-align: center;
+  align-items: center;
+  text-align: left;
 `;
 
 const Label = styled.p`
-  margin: 0 auto;
+  flex: 1;
 `;
 
 export default function AddStorage() {
@@ -149,7 +150,7 @@ export default function AddStorage() {
 
           <HBox>
             <Label>Delete on termination:</Label>
-            <Checkbox checked={storages[form].DeleteOnTermination} onChange={e => handleChange(e, 'DeleteOnTermination')} value={storages[form].DeleteOnTermination} />
+            <Checkbox onChange={e => handleChange(e, 'DeleteOnTermination')} value={!!storages[form].DeleteOnTermination} />
           </HBox>
 
           <HBox>
