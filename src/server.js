@@ -95,10 +95,13 @@ apiApp.use(cors());
 apiApp.use(bodyParser.json());
 apiApp.use(bodyParser.urlencoded({ extended: true }));
 
+const region = process.env.REGION || 'eu-west-2';
+process.stdout.write(`Using EC2 region ${region}.\n`);
+
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: 'eu-west-2'
+  region
 });
 
 const ec2 = new AWS.EC2({ apiVersion: '2016-11-15' });
