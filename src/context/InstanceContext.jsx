@@ -34,15 +34,13 @@ function reducer(state, action) {
       };
     }
     case 'SECURITY_GROUP': {
-      const { name, description, rules } = action.payload;
-      return {
+      const { securityGroup } = action.payload;
+      const newState = {
         ...state,
-        securityGroup: {
-          name,
-          description,
-          rules
-        }
+        securityGroup
       };
+      console.log(newState);
+      return newState;
     }
     case 'INSTANCE_TAGS': {
       const { instanceTags } = action.payload;

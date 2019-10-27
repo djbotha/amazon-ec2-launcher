@@ -1,0 +1,19 @@
+[
+  "All",
+  "Echo reply",
+  "Destination unreachable",
+  "Source quench",
+  "Redirect",
+  "Echo",
+  "Router advertisement",
+  "Router selection",
+  "Time exceeded",
+  "Parameter problem",
+  "Timestamp",
+  "Timestamp reply",
+  "Information request",
+  "Information reply",
+  "Address mask request",
+  "Address mask reply",
+  "Traceroute"
+]

@@ -10,8 +10,27 @@ import Typography from '@material-ui/core/Typography';
 import Error from './common/Error';
 import Loading from './common/Loading';
 import useAPI from '../hooks/useAPI';
+import ICMP_TYPES from '../static/icmp_types';
+import { useInstance } from '../context/InstanceContext';
 
-const TYPES = ['Custom TCP Rule', 'Custom UPD Rule', 'Custom ICMP Rule - IPv4'];
+const TYPES = [
+  {
+    key: 'All',
+    val: 'all'
+  },
+  {
+    key: 'TCP',
+    val: 'tcp'
+  },
+  {
+    key: 'UPD',
+    val: 'udp'
+  },
+  {
+    key: 'ICMP',
+    val: 'icmp'
+  }
+];
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -58,45 +77,45 @@ function SelectOrNewGroup({ handleExisting, handleNew }) {
   );
 }
 
-function newEntry(id) {
+function newRule(id) {
   return {
     id,
-    type: '',
-    protocol: 'All',
-    portRange: '0-65535',
-    sourceType: 'Custom',
-    ip: '0.0.0.0/0',
-    description: 'e.g. SSH for Admin Desktop'
+    protocol: 'all',
+    portRange: '',
+    icmpType: '',
+    cidrIp: '',
+    description: ''
   };
 }
 
 function NewGroup() {
-  const [state, setState] = useState({
+  const { dispatch } = useInstance();
+  const [securityGroup, setSecurityGroup] = useState({
     name: 'launch-wizard-1',
     description: `launch-wizard-1 created ${new Date(Date.now()).toString()}`
   });
-  const [entries, setEntries] = useState([newEntry(0)]);
+  const [rules, setRules] = useState([newRule(0)]);
 
   const classes = useStyles();
 
   const handleFieldChange = (e, key) => {
-    setState({ ...state, [key]: e.target.value });
+    setSecurityGroup({ ...securityGroup, [key]: e.target.value });
   };
 
-  const handleEntryChange = (e, key, idx) => {
-    const oldEntries = entries;
-    oldEntries[idx][key] = e.target.value;
-    setEntries([...oldEntries]);
+  const handleRuleChange = (e, key, idx) => {
+    const oldRules = rules;
+    oldRules[idx][key] = e.target.value;
+    setRules([...oldRules]);
   };
 
   const handleSaveSG = () => {
-    console.log(entries);
+    dispatch({ type: 'SECURITY_GROUP', payload: { securityGroup: { ...securityGroup, rules } } });
   };
 
   return (
     <Box className={classes.left}>
-      <TextField className={classes.textField} required label="Name" margin="normal" value={state.name} onChange={e => handleFieldChange(e, 'name')} />
-      <TextField className={classes.textField} required label="Description" margin="normal" value={state.description} onChange={e => handleFieldChange(e, 'description')} />
+      <TextField className={classes.textField} required label="Name" margin="normal" value={securityGroup.name} onChange={e => handleFieldChange(e, 'name')} />
+      <TextField className={classes.textField} required label="Description" margin="normal" value={securityGroup.description} onChange={e => handleFieldChange(e, 'description')} />
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
@@ -105,12 +124,12 @@ function NewGroup() {
                 title="The protocol to open to network traffic. You can choose a common protocol, such as SSH (for a Linux instance), RDP (for a Windows instance), and HTTP and HTTPS to allow Internet traffic to reach your instance. You can also manually enter a custom port or port ranges."
                 placement="top"
               >
-                <Typography>Type</Typography>
+                <Typography>Protocol</Typography>
               </Tooltip>
             </TableCell>
             <TableCell>
               <Tooltip title="The type of protocol, for example TCP or UDP. Provides an additional selection for ICMP." placement="top">
-                <Typography>Protocol</Typography>
+                <Typography>Type</Typography>
               </Tooltip>
             </TableCell>
             <TableCell>
@@ -134,13 +153,13 @@ function NewGroup() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {entries.map((entry, idx) => (
+          {rules.map((entry, idx) => (
             <TableRow key={entry.id}>
               <TableCell>
                 <TextField
                   select
-                  value={entry.type}
-                  onChange={e => handleEntryChange(e, 'type', idx)}
+                  value={entry.protocol}
+                  onChange={e => handleRuleChange(e, 'protocol', idx)}
                   SelectProps={{
                     MenuProps: {
                       className: classes.menu
@@ -148,45 +167,54 @@ function NewGroup() {
                   }}
                   margin="normal"
                 >
-                  {TYPES.map(type => (
-                    <MenuItem key={type} value={type}>
-                      {type}
+                  {TYPES.map(({ key, val }) => (
+                    <MenuItem key={val} value={val}>
+                      {key}
                     </MenuItem>
                   ))}
                 </TextField>
               </TableCell>
-              <TableCell>{entry.protocol}</TableCell>
               <TableCell>
-                <TextField required margin="normal" value={entry.portRange} onChange={e => handleEntryChange(e, 'portRange', idx)} />
+                {entry.protocol === 'icmp' ? (
+                  <TextField
+                    select
+                    value={entry.icmpType}
+                    onChange={e => handleRuleChange(e, 'icmpType', idx)}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu
+                      }
+                    }}
+                    margin="normal"
+                  >
+                    {ICMP_TYPES.map(type => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                ) : (
+                  'N/A'
+                )}
               </TableCell>
               <TableCell>
-                <TextField
-                  select
-                  value={entry.sourceType}
-                  onChange={e => handleEntryChange(e, 'sourceType', idx)}
-                  SelectProps={{
-                    MenuProps: {
-                      className: classes.menu
-                    }
-                  }}
-                  margin="normal"
-                >
-                  {['Custom', 'Anywhere', 'My IP'].map(type => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField required margin="normal" value={entry.ip} onChange={e => handleEntryChange(e, 'ip', idx)} />
+                {entry.protocol !== 'icmp' ? (
+                  <TextField required margin="normal" value={entry.portRange} onChange={e => handleRuleChange(e, 'portRange', idx)} placeholder="0-65535" />
+                ) : (
+                  'N/A'
+                )}
               </TableCell>
               <TableCell>
-                <TextField required margin="normal" value={entry.description} onChange={e => handleEntryChange(e, 'description', idx)} />
+                <TextField required margin="normal" value={entry.cidrIp} onChange={e => handleRuleChange(e, 'cidrIp', idx)} placeholder="0.0.0.0/0" />
+              </TableCell>
+              <TableCell>
+                <TextField required margin="normal" value={entry.description} onChange={e => handleRuleChange(e, 'description', idx)} placeholder="e.g. SSH for Admin Desktop" />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Button variant="contained" color="primary" className={classes.addButton} onClick={() => setEntries([...entries, newEntry(entries.length)])}>
+      <Button variant="contained" color="primary" className={classes.addButton} onClick={() => setRules([...rules, newRule(rules.length)])}>
         Add Row
       </Button>
       <Button variant="contained" color="primary" className={classes.addButton} onClick={handleSaveSG}>
