@@ -43,7 +43,7 @@ export default function DisplayAdvanced() {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
-      <ExpansionPanel>
+      <ExpansionPanel expanded>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="Storage">
           <Typography>Add Storage</Typography>
         </ExpansionPanelSummary>
