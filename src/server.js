@@ -425,6 +425,7 @@ apiApp.post('/launchInstance', async (req, res) => {
         DeviceName: volume.deviceName,
         Ebs: {
           VolumeSize: volume.size,
+          VolumeType: volume.type || 'gp2',
           DeleteOnTermination: volume.deleteOnTermination !== undefined ? volume.deleteOnTermination : true
         }
       }));
@@ -453,7 +454,8 @@ apiApp.post('/launchInstance', async (req, res) => {
       success: true,
       instanceId
     });
-  } catch (err) { // thrown when any promise fails
+  } catch (err) {
+    // thrown when any promise fails
     process.stdout.write('An error occured whilst launching an instance:\n');
     process.stdout.write(JSON.stringify(err || null));
     res.status(500).json({

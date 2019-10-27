@@ -297,6 +297,12 @@ If a volume is specified in the `volumes` section with this device name, it will
 created automatically. If no `volumes` are specified, this default 8GiB volume will be created and used and is deleted
 on termination.
 
+For each volume volume, the `type` field can be:
+- `gp2` (General Purpose SSD, default)
+- `standard` (Magnetic)
+- `st1` (Throughput Optimized HDD)
+- `sc1` (Cold HDD)
+
 #### Example
 
 Request: [http://localhost:8081/launchInstance](http://localhost:8081/launchInstance)
@@ -377,6 +383,7 @@ POST Body (`application/json`):
         {
             "deviceName": "/dev/xvda",
             "size": 12,
+            "type": "gp2",
             "deleteOnTermination": true
         }
     ]
