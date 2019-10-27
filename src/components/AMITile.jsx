@@ -49,7 +49,7 @@ export default function AMICard({ ami, expandAll }) {
   const { dispatch } = useInstance();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(expandAll);
-  const { name, description, architecture, rootDeviceType, virtualizationType, enaSupport, freeTier } = ami;
+  const { imageId, name, description, architecture, rootDeviceType, virtualizationType, enaSupport, freeTier } = ami;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -60,7 +60,7 @@ export default function AMICard({ ami, expandAll }) {
   }, [expandAll]);
 
   const handleSelectAMI = () => {
-    dispatch({ type: 'AMI', payload: { ami } });
+    dispatch({ type: 'AMI', payload: { imageId } });
   };
 
   return (

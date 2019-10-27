@@ -11,13 +11,59 @@ const InstanceContext = createContext();
 function reducer(state, action) {
   switch (action.type) {
     case 'AMI': {
-      const { ami } = action.payload;
+      const { imageId } = action.payload;
       const newState = {
         ...state,
-        ami
+        imageId
       };
       console.log(newState);
       return newState;
+    }
+    case 'INSTANCE_TYPE': {
+      const { instanceType } = action.payload;
+      return {
+        ...state,
+        instanceType
+      };
+    }
+    case 'KEY_PAIR': {
+      const { keypairName } = action.payload;
+      return {
+        ...state,
+        keypairName
+      };
+    }
+    case 'SECURITY_GROUP': {
+      const { name, description, rules } = action.payload;
+      return {
+        ...state,
+        securityGroup: {
+          name,
+          description,
+          rules
+        }
+      };
+    }
+    case 'INSTANCE_TAGS': {
+      const { instanceTags } = action.payload;
+      return {
+        ...state,
+        instanceTags
+      };
+    }
+    case 'VOLUME_TAGS': {
+      const { volumeTags } = action.payload;
+      return {
+        ...state,
+        volumeTags
+      };
+    }
+    case 'VOLUMES': {
+      const { volumes } = action.payload;
+      return {
+        ...state,
+        volumes
+      };
     }
     default:
       return state;
@@ -25,7 +71,7 @@ function reducer(state, action) {
 }
 
 /**
- * Middelware for InstanceContext.Provider in order to inject reducer state and dispatch
+ * Middleware for InstanceContext.Provider in order to inject reducer state and dispatch
  *
  * @param {object} props Additional props that are passed to this funciton
  */
