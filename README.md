@@ -14,8 +14,8 @@ An IAM user with appropriate roles is required to use the AWS APIs for the Launc
 2. Navigate to the _Users_ option and select _Add User_.
 3. Enter an appropriate username and allow _Programmatic access_.
 4. Under _Set Permissions_, select the _Attach existing policies directly_ option and choose the following policy names:
-    * `AmazonEC2FullAccess`
-    * `AWSPriceListServiceFullAccess`
+   - `AmazonEC2FullAccess`
+   - `AWSPriceListServiceFullAccess`
 5. Skip the next few steps and finish creating the user.
 6. Note the generated `Access key ID` and `Secret access key`, which will be required in the `.env` file as explained below.
 
@@ -31,7 +31,7 @@ git clone git@github.com:djbotha/amazon-ec2-launcher.git
 
 Create a file called `.env` in the project root and add the below two lines, replacing the
 placeholders with your IAM user's `Access key ID` and `Secret access key` as obtained above.
-*Be sure to keep this file outside of version control!*
+_Be sure to keep this file outside of version control!_
 
 ```
 REGION=eu-west-2
@@ -43,7 +43,8 @@ SECRET_ACCESS_KEY=<Your secret access key>
 To launch the project, run:
 
 ```
-docker-compose up
+npm install
+npm run dev
 ```
 
 To run the collector to collect information on all instance types, run:
