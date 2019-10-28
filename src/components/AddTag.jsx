@@ -55,6 +55,14 @@ export default function AddTag() {
 
   return (
     <Box>
+      <p>
+        A tag consists of a case-sensitive key-value pair. For example, you could define a tag with key = Name and value = Webserver. A copy of a tag can be applied to volumes,
+        instances or both. Tags will be applied to all instances and volumes.
+        <a href="https://docs.aws.amazon.com/console/ec2/tags"> Learn more </a>
+        about tagging your Amazon EC2 resources. Make sure your
+        <a href="https://docs.aws.amazon.com/console/ec2/launchinstance/tags/iam"> IAM policy </a>
+        includes permissions to create tags.
+      </p>
       <Table>
         <TableHead>
           <TableRow>
