@@ -3,9 +3,11 @@ import { FormControlLabel, Box, Grid, Switch } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { debounce } from 'lodash';
+import Pagination from 'material-ui-flat-pagination';
 
 import useAPI from '../hooks/useAPI';
 import AMITile from './AMITile';
+import Loading from './common/Loading';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,10 +23,19 @@ const useStyles = makeStyles(theme => ({
   },
   menu: {
     width: 200
+  },
+  pagination: {
+    width: '100%',
+    textAlign: 'center',
+    margin: '0 auto 1rem'
   }
 }));
 
 export default function ChooseAMI() {
+  const [pagination, setPagination] = useState({
+    limit: 9,
+    offset: 0
+  });
   const [amis, setAmis] = useState([]);
   const [{ data: quickstartData }] = useAPI({
     url: '/amis/quickstart',
@@ -33,7 +44,7 @@ export default function ChooseAMI() {
       limit: 50
     }
   });
-  const [{ data: searchedData }, refetch] = useAPI(
+  const [{ data: searchedData, loading }, refetch] = useAPI(
     {
       url: '/amis/search',
       method: 'GET'
@@ -41,6 +52,7 @@ export default function ChooseAMI() {
     { manual: true }
   );
 
+  const [numResults, setNumResults] = useState({});
   const [expandAll, setExpandAll] = useState(false);
   const [freeTierOnly, setFreeTierOnly] = useState(false);
   const [search, setSearch] = useState('');
@@ -59,30 +71,30 @@ export default function ChooseAMI() {
       () => {
         if (search.trim() === '' && quickstartData && quickstartData.data) {
           setAmis(quickstartData.data);
+          setNumResults(quickstartData.data.length);
           return;
         }
 
         if (search.trim() !== '') {
           refetch({
             url: `/amis/search/${search}`,
-            params: {
-              limit: 9,
-              offset: 0
-            }
+            params: pagination
           });
         }
       },
       200,
       { maxWait: 300 }
     ),
-    [search]
+    [search, pagination]
   );
 
   useEffect(() => {
     if (searchedData && searchedData.data && search.trim() !== '') {
       setAmis(searchedData.data);
+      setNumResults(searchedData.numResults);
     } else if (quickstartData && quickstartData.data) {
       setAmis(quickstartData.data);
+      setNumResults(quickstartData.data.length);
     }
   }, [quickstartData, search, searchedData]);
 
@@ -105,6 +117,19 @@ export default function ChooseAMI() {
         control={<Switch checked={freeTierOnly} onChange={handleFreeTier} value="freeTierOnly" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
         label="Free Tier Only"
       />
+
+      {amis.length > 0 && (
+        <Pagination
+          className={classes.pagination}
+          reduced
+          limit={pagination.limit}
+          offset={pagination.offset}
+          total={Math.ceil(numResults / pagination.limit)}
+          onClick={(e, offset) => setPagination({ ...pagination, offset })}
+        />
+      )}
+      {amis.length === 0 && <div className={classes.pagination}>No matches found.</div>}
+      {loading && <Loading />}
       <Grid container>
         {amis.map(ami => (
           <Grid item xs={4} key={ami.imageId}>
@@ -112,6 +137,16 @@ export default function ChooseAMI() {
           </Grid>
         ))}
       </Grid>
+      {amis.length > 0 && (
+        <Pagination
+          className={classes.pagination}
+          reduced
+          limit={pagination.limit}
+          offset={pagination.offset}
+          total={Math.ceil(numResults / pagination.limit)}
+          onClick={(e, offset) => setPagination({ ...pagination, offset })}
+        />
+      )}
     </Box>
   );
 }

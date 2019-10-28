@@ -1,123 +1,101 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import INSTANCES from '../static/instance';
+import Error from './common/Error';
+import Loading from './common/Loading';
+
+import useAPI from '../hooks/useAPI';
+import { useInstance } from '../context/InstanceContext';
 
 export default function ChooseInstanceType() {
-  const [instances, setInstances] = useState(INSTANCES);
-  const [filters, setFilters] = useState({
-    freeTier: false,
-    turbo: false,
-    AVX: false,
-    AESNI: false,
-    IPv6: false,
-    EBSOptimizedAvailable: false,
-    family: 'All'
-  });
+  const { dispatch } = useInstance();
+  const [instances, setInstances] = useState([]);
+  const [{ data, error, loading }] = useAPI('/instanceTypesDetailed');
 
-  const handleToggle = key => {
-    setFilters({ ...filters, [key]: !filters[key] });
-  };
-
-  const handleFamily = e => {
-    setFilters({ ...filters, family: e.target.value });
-  };
+  const [family, setFamily] = useState('All');
 
   const filterFamily = useCallback(
     instance => {
-      if (filters.family === 'All') {
-        return true;
-      }
-      if (filters.family === instance.family) {
+      if (family === instance.family) {
         return true;
       }
       return false;
     },
-    [filters]
+    [family]
   );
 
   useEffect(() => {
     setInstances(() => {
-      let allInstances = INSTANCES;
-      allInstances = allInstances.filter(instance => (filters.freeTier ? filters.freeTier === instance.freeTier : true));
-      allInstances = allInstances.filter(instance => (filters.turbo ? filters.turbo === instance.turbo : true));
-      allInstances = allInstances.filter(instance => (filters.AVX ? filters.AVX === instance.AVX : true));
-      allInstances = allInstances.filter(instance => (filters.AESNI ? filters.AESNI === instance.AESNI : true));
-      allInstances = allInstances.filter(instance => (filters.IPv6 ? filters.IPv6 === instance.IPv6 : true));
-      allInstances = allInstances.filter(instance => (filters.EBSOptimizedAvailable ? filters.EBSOptimizedAvailable === instance.EBSOptimizedAvailable : true));
-      allInstances = allInstances.filter(instance => (filters.family !== 'All' ? filterFamily(instance) : true));
+      let allInstances = (data && data.data) || [];
+      allInstances = allInstances.filter(instance => family === 'All' || filterFamily(instance));
       return allInstances;
     });
-  }, [filterFamily, filters]);
+  }, [data, family, filterFamily]);
 
+  useEffect(() => {
+    if (data && data.data) {
+      setInstances(data.data);
+    }
+  }, [data]);
+
+  const selectInstanceType = instanceType => {
+    dispatch({ type: 'INSTANCE_TYPE', payload: { instanceType } });
+  };
+
+  if (error && error.message) return <Error error={error.message} />;
+
+  if (loading) return <Loading />;
   return (
     <Box>
-      <Select value={filters.family} onChange={handleFamily} name="family">
+      <Select value={family} onChange={e => setFamily(e.target.value)} name="family">
         <MenuItem value="All">All instance families</MenuItem>
-        <MenuItem value="Micro">Micro instances</MenuItem>
-        <MenuItem value="General">General Purpose</MenuItem>
-        <MenuItem value="Compute">Compute optimized</MenuItem>
-        <MenuItem value="FPGA">FPGA instances</MenuItem>
-        <MenuItem value="GPU">GPU instances</MenuItem>
-        <MenuItem value="Memory">Memory optimized</MenuItem>
-        <MenuItem value="Storage">Storage optimized</MenuItem>
+        <MenuItem value="Compute Instance">Compute Instance</MenuItem>
+        <MenuItem value="Compute Instance (bare metal)">Compute Instance (bare metal)</MenuItem>
       </Select>
-
-      <FormControlLabel
-        control={<Switch checked={filters.freeTier} onChange={() => handleToggle('freeTier')} size="small" value="freeTier" color="primary" />}
-        label="Free Tier Only"
-      />
-
-      <FormControlLabel control={<Switch checked={filters.turbo} onChange={() => handleToggle('turbo')} size="small" value="turbo" color="primary" />} label="Turbo" />
-
-      <FormControlLabel control={<Switch checked={filters.avx} onChange={() => handleToggle('avx')} size="small" value="avx" color="primary" />} label="AVX" />
-
-      <FormControlLabel control={<Switch checked={filters.aesni} onChange={() => handleToggle('aesni')} size="small" value="aesni" color="primary" />} label="AES-NI" />
-
-      <FormControlLabel control={<Switch checked={filters.IPv6} onChange={() => handleToggle('IPv6')} size="small" value="IPv6" color="primary" />} label="IPv6 support" />
-
-      <FormControlLabel
-        control={<Switch checked={filters.EBSOptimized} onChange={() => handleToggle('EBSOptimized')} size="small" value="EBSOptimized" color="primary" />}
-        label="EBS Optimized Available"
-      />
 
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell align="right">Family</TableCell>
-            <TableCell align="right">Type</TableCell>
-            <TableCell align="right">ECUs</TableCell>
-            <TableCell align="right">vCPUs</TableCell>
-            <TableCell align="right">Physical Processor</TableCell>
-            <TableCell align="right">Clock Speed</TableCell>
-            <TableCell align="right">Memory</TableCell>
-            <TableCell align="right">Instance Storage</TableCell>
-            <TableCell align="right">Network Performance</TableCell>
-            <TableCell align="right">Processor Architecture</TableCell>
+            <TableCell>Type</TableCell>
+            <TableCell>Family</TableCell>
+            <TableCell>ECUs</TableCell>
+            <TableCell>vCPUs</TableCell>
+            <TableCell>Physical Processor</TableCell>
+            <TableCell>Memory</TableCell>
+            <TableCell>Instance Storage</TableCell>
+            <TableCell>Network Performance</TableCell>
+            <TableCell>Processor Architecture</TableCell>
+            <TableCell>On-Demand hourly Price</TableCell>
+            <TableCell>Select</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {instances.map(instance => (
-            <TableRow key={instance.id}>
-              <TableCell align="right">{instance.family}</TableCell>
-              <TableCell align="right">{instance.type}</TableCell>
-              <TableCell align="right">{instance.ECUs}</TableCell>
-              <TableCell align="right">{instance.vCPUs}</TableCell>
-              <TableCell align="right">{instance.physicalProcessor}</TableCell>
-              <TableCell align="right">{`${instance.clockSpeed} GHz`}</TableCell>
-              <TableCell align="right">{instance.memory}</TableCell>
-              <TableCell align="right">{instance.instanceStorage}</TableCell>
-              <TableCell align="right">{instance.networkPerformance}</TableCell>
-              <TableCell align="right">{instance.processorArchitecture}</TableCell>
+            <TableRow key={instance.instanceType}>
+              <TableCell>{instance.instanceType}</TableCell>
+              <TableCell>{instance.family}</TableCell>
+              <TableCell>{instance.ecu}</TableCell>
+              <TableCell>{instance.vcpu}</TableCell>
+              <TableCell>{instance.physicalProcessor}</TableCell>
+              <TableCell>{instance.memory}</TableCell>
+              <TableCell>{instance.storage}</TableCell>
+              <TableCell>{instance.networkPerformance}</TableCell>
+              <TableCell>{instance.processorArchitecture}</TableCell>
+              <TableCell>{`${instance.onDemandHourlyPrice.currency} ${instance.onDemandHourlyPrice.value}`}</TableCell>
+              <TableCell>
+                <IconButton color="primary" onClick={() => selectInstanceType(instance.instanceType)}>
+                  <AddCircleIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

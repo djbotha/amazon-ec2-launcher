@@ -2,6 +2,108 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 const InstanceContext = createContext();
 
+// eslint-disable-next-line
+const defaultState = {
+  instanceType: 't2.micro',
+  imageId: 'ami-00a1270ce1e007c27',
+  keypairName: 'EC2_keypair',
+  securityGroup: {
+    name: 'new-instance-security-group',
+    description: 'Test of API',
+    rules: [
+      {
+        protocol: 'icmp',
+        icmpType: 'Destination unreachable',
+        cidrIp: '0.0.0.0/0',
+        description: 'ICMP Destination unreachable test'
+      },
+      {
+        protocol: 'icmp',
+        icmpType: 'Echo reply',
+        cidrIp: '0.0.0.0/0',
+        description: 'ICMP Echo Reply test'
+      },
+      {
+        protocol: 'all_traffic',
+        cidrIp: '0.0.0.0/0',
+        description: 'Allow all traffic'
+      },
+      {
+        protocol: 'udp',
+        portRange: '25565',
+        cidrIp: '3.9.1.19/32',
+        description: 'Minecraft only for single IP'
+      },
+      {
+        protocol: 'tcp',
+        portRange: '80-84',
+        cidrIp: '0.0.0.0/0',
+        description: 'HTTP on ports 80 to 84 open to the world'
+      },
+      {
+        protocol: 'tcp',
+        portRange: '443',
+        cidrIp: '0.0.0.0/0',
+        description: 'HTTPS on port 443'
+      },
+      {
+        protocol: 'icmp',
+        icmpType: 'Echo',
+        cidrIp: '0.0.0.0/0',
+        description: 'ICMP Echo Request test'
+      }
+    ]
+  },
+  instanceTags: [
+    {
+      key: 'Name',
+      value: 'joseph'
+    },
+    {
+      key: 'Department',
+      value: 'compsci'
+    }
+  ],
+  volumeTags: [
+    {
+      key: 'Category',
+      value: 'general'
+    },
+    {
+      key: 'Food',
+      value: 'pizza'
+    }
+  ],
+  volumes: [
+    {
+      deviceName: '/dev/xvda',
+      size: 12,
+      type: 'gp2',
+      deleteOnTermination: true
+    }
+  ]
+};
+
+const Titles = {
+  imageId: 'Image ID',
+  instanceType: 'Instance Type',
+  keypairName: 'Key Pair',
+  securityGroup: 'Security Group',
+  instanceTags: 'Instance Tags',
+  volumeTags: 'Volume Tags',
+  volumes: 'Volumes'
+};
+
+const Fields = {
+  instanceType: '',
+  imageId: '',
+  keypairName: '',
+  securityGroup: ['name', 'description'],
+  instanceTags: ['key', 'value'],
+  volumeTags: ['key', 'value'],
+  volumes: ['deviceName', 'size', 'type', 'deleteOnTermination']
+};
+
 /**
  * Reducer function used to update our state
  *
@@ -34,15 +136,13 @@ function reducer(state, action) {
       };
     }
     case 'SECURITY_GROUP': {
-      const { name, description, rules } = action.payload;
-      return {
+      const { securityGroup } = action.payload;
+      const newState = {
         ...state,
-        securityGroup: {
-          name,
-          description,
-          rules
-        }
+        securityGroup
       };
+      console.log(newState);
+      return newState;
     }
     case 'INSTANCE_TAGS': {
       const { instanceTags } = action.payload;
@@ -63,6 +163,14 @@ function reducer(state, action) {
       return {
         ...state,
         volumes
+      };
+    }
+    case 'REMOVE': {
+      const { key } = action.payload;
+      const newState = state;
+      delete newState[key];
+      return {
+        ...newState
       };
     }
     default:
@@ -91,4 +199,4 @@ function useInstance() {
   return context;
 }
 
-export { InstanceProvider, useInstance };
+export { Titles, Fields, InstanceProvider, useInstance };

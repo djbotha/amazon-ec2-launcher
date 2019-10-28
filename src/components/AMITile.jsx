@@ -10,7 +10,8 @@ import { useInstance } from '../context/InstanceContext';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 345
+    maxWidth: 345,
+    marginBottom: '1rem'
   },
   title: {
     fontSize: '1rem',
