@@ -19,6 +19,7 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { useInstance } from '../context/InstanceContext';
 
 import STORAGES from '../static/storage.JSON';
 
@@ -55,6 +56,13 @@ const Label = styled.p`
 export default function AddStorage() {
   const [storages, setStorages] = useState(STORAGES);
   const [form, setForm] = useState(0);
+  const { dispatch } = useInstance();
+  const [volumes, setVolumes] = useState([{}]);
+
+  const handleUpdate = () => {
+    setVolumes(storages);
+    dispatch({ type: 'VOLUMES', payload: { volumes } });
+  };
 
   const handleChange = (e, field) => {
     setStorages(oldForm =>
@@ -89,13 +97,13 @@ export default function AddStorage() {
   const newState = () => ({
     id: storages.length + 1,
     rootEBS: 'EBS',
-    Device: '',
+    deviceName: '',
     Snapshot: '',
-    Size: '8',
-    VolumeType: 'General Purpose SSD (gp2)',
+    size: '8',
+    type: 'General Purpose SSD (gp2)',
     IOPS: '100/3000',
     Throughput: 'N/A',
-    DeleteOnTermination: false,
+    deleteOnTermination: false,
     Encryption: 'Not Encrypted'
   });
 
@@ -132,9 +140,11 @@ export default function AddStorage() {
                   <TableCell align="left">
                     {storage.id}
                     {storage.rootEBS}
-                    <IconButton onClick={() => handleRemove(storage.id)}>
-                      <DeleteIcon color="error" />
-                    </IconButton>
+                    {storage.id > 1 && (
+                      <IconButton onClick={() => handleRemove(storage.id)}>
+                        <DeleteIcon color="error" />
+                      </IconButton>
+                    )}
                     <IconButton onClick={() => handleRowClick(storage.id - 1)}>
                       <ArrowForwardIcon color="primary" />
                     </IconButton>
@@ -157,7 +167,7 @@ export default function AddStorage() {
             {form !== 0 && (
               <FormControl>
                 <InputLabel>Device</InputLabel>
-                <Select value={storages[form].Device} onChange={e => handleChange(e, 'Device')}>
+                <Select value={storages[form].deviceName} onChange={e => handleChange(e, 'deviceName')}>
                   <MenuItem value="/dev/sdb">/dev/sdb</MenuItem>
                   <MenuItem value="/dev/sdc">/dev/sdc</MenuItem>
                   <MenuItem value="/dev/sdd">/dev/sdd</MenuItem>
@@ -182,19 +192,19 @@ export default function AddStorage() {
 
           <HBox>
             <Label>Size:</Label>
-            <TextField value={storages[form].Size || 0} onChange={e => handleChange(e, 'Size')} type="number" />
+            <TextField value={storages[form].size || 0} onChange={e => handleChange(e, 'size')} type="number" />
           </HBox>
 
           <HBox>
             <Label>Volume Type:</Label>
             <FormControl>
               <InputLabel>Volume Type</InputLabel>
-              <Select value={storages[form].VolumeType} onChange={e => handleChange(e, 'VolumeType')}>
-                <MenuItem value="General Purpose SSD (gp2)">General Purpose SSD (gp2)</MenuItem>
-                <MenuItem value="Provisional IOPS SSD (io1)">Provisioned IOPS SSD (io1)</MenuItem>
-                <MenuItem value="Magnetic (standard)">Magnetic (standard)</MenuItem>
-                <MenuItem value="Cold HDD (sc1)">Cold HDD (sc1)</MenuItem>
-                <MenuItem value="Throughput Optimized HDD (st1)">Throughput Optimized HDD (st1)</MenuItem>
+              <Select value={storages[form].type} onChange={e => handleChange(e, 'type')}>
+                <MenuItem value="gp2">General Purpose SSD (gp2)</MenuItem>
+                <MenuItem value="io1">Provisioned IOPS SSD (io1)</MenuItem>
+                <MenuItem value="standard">Magnetic (standard)</MenuItem>
+                <MenuItem value="sc1">Cold HDD (sc1)</MenuItem>
+                <MenuItem value="st1">Throughput Optimized HDD (st1)</MenuItem>
               </Select>
             </FormControl>
           </HBox>
@@ -211,7 +221,7 @@ export default function AddStorage() {
 
           <HBox>
             <Label>Delete on termination:</Label>
-            <Checkbox onChange={e => handleChange(e, 'DeleteOnTermination')} value={!!storages[form].DeleteOnTermination} checked={!!storages[form].DeleteOnTermination} />
+            <Checkbox onChange={e => handleChange(e, 'deleteOnTermination')} value={!!storages[form].deleteOnTermination} checked={!!storages[form].deleteOnTermination} />
           </HBox>
 
           <HBox>
@@ -224,6 +234,9 @@ export default function AddStorage() {
               </Select>
             </FormControl>
           </HBox>
+          <Button variant="contained" color="primary" size="large" onClick={() => handleUpdate()}>
+            Update
+          </Button>
         </RightPanel>
       </Panels>
     </Box>
