@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 
 import AddStorage from './AddStorage';
 import AddTag from './AddTag';
+import KeyPairs from './KeyPairs';
 import ChooseAMI from './ChooseAMI';
 import ChooseInstanceType from './ChooseInstanceType';
 import ConfigureSecurityGroup from './ConfigureSecurityGroup';
@@ -58,6 +59,15 @@ export default function DisplayAdvanced() {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <AddTag />
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="KeyPairs">
+          <Typography>Key Pairs</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <KeyPairs />
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </Container>
