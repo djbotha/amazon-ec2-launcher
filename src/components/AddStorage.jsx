@@ -57,11 +57,9 @@ export default function AddStorage() {
   const [storages, setStorages] = useState(STORAGES);
   const [form, setForm] = useState(0);
   const { dispatch } = useInstance();
-  const [volumes, setVolumes] = useState([{}]);
 
   const handleUpdate = () => {
-    setVolumes(storages);
-    dispatch({ type: 'VOLUMES', payload: { volumes } });
+    dispatch({ type: 'VOLUMES', payload: { volumes: storages } });
   };
 
   const handleChange = (e, field) => {
@@ -234,7 +232,7 @@ export default function AddStorage() {
               </Select>
             </FormControl>
           </HBox>
-          <Button variant="contained" color="primary" size="large" onClick={() => handleUpdate()}>
+          <Button variant="contained" color="primary" size="large" onClick={handleUpdate}>
             Update
           </Button>
         </RightPanel>
