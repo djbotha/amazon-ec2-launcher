@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -10,6 +13,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { Checkbox } from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+import { useInstance } from '../context/InstanceContext';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -27,83 +33,152 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     display: 'none'
+  },
+  fullWidth: {
+    width: '100%'
   }
 }));
 
+const blankTag = () => ({
+  key: '',
+  value: '',
+  instance: false,
+  volume: false
+});
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  * {
+    flex: 1;
+  }
+`;
+
 export default function AddTag() {
-  const [key, setKey] = useState('');
-  const [val, setVal] = useState('');
+  const { dispatch } = useInstance();
+  const [newTag, setNewTag] = useState(blankTag());
   const [tags, setTags] = useState([]);
   const classes = useStyles();
 
-  const updateTag = e => {
-    setKey(e.target.value);
+  const showTag = () => {
+    setTags(oldTags => [...oldTags, newTag]);
+    setNewTag(blankTag());
   };
 
-  const updateVal = e => {
-    setVal(e.target.value);
+  const handleChange = field => e => {
+    setNewTag({ ...newTag, [field]: e.target.value });
   };
 
-  function showTag() {
-    setTags([...tags, { id: tags.length, key, val }]);
-    setKey('');
-    setVal('');
-  }
-  function removeTag() {
-    setTags(tags.slice(0, tags.length - 1));
-  }
+  const handleToggle = field => e => {
+    setNewTag({ ...newTag, [field]: e.target.checked });
+  };
+
+  const removeTag = idx => {
+    setTags(oldTags => oldTags.filter((_, id) => id !== idx));
+  };
+
+  const saveTags = () => {
+    dispatch({
+      type: 'INSTANCE_TAGS',
+      payload: {
+        instanceTags: tags
+          .filter(t => t.instance)
+          .map(({ key, value }) => ({
+            key,
+            value
+          }))
+      }
+    });
+
+    dispatch({
+      type: 'VOLUME_TAGS',
+      payload: {
+        volumeTags: tags
+          .filter(t => t.volume)
+          .map(({ key, value }) => ({
+            key,
+            value
+          }))
+      }
+    });
+  };
 
   return (
-    <Box>
+    <Box className={classes.fullWidth}>
+      <Row>
+        <form noValidate autoComplete="off">
+          <TextField
+            id="outlined-search"
+            label="Key"
+            type="search"
+            className={classes.textField}
+            margin="normal"
+            value={newTag.key}
+            variant="outlined"
+            onChange={handleChange('key')}
+          />
+        </form>
+
+        <form noValidate autoComplete="off">
+          <TextField
+            id="outlined-search"
+            label="Value"
+            type="search"
+            className={classes.textField}
+            margin="normal"
+            value={newTag.value}
+            variant="outlined"
+            onChange={handleChange('value')}
+          />
+        </form>
+
+        <FormControlLabel control={<Checkbox checked={newTag.instance} onChange={handleToggle('instance')} />} label="Instances" />
+
+        <FormControlLabel control={<Checkbox checked={newTag.volume} onChange={handleToggle('volume')} />} label="Volumes" />
+
+        <Button variant="contained" className={classes.button} onClick={showTag}>
+          Add Tag
+        </Button>
+      </Row>
+
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>
-              <form noValidate autoComplete="off">
-                <TextField id="outlined-search" label="Key" type="search" className={classes.textField} margin="normal" value={key} variant="outlined" onChange={updateTag} />
-              </form>
-            </TableCell>
-            <TableCell>
-              <form noValidate autoComplete="off">
-                <TextField id="outlined-search" label="Value" type="search" className={classes.textField} margin="normal" value={val} variant="outlined" onChange={updateVal} />
-              </form>
-            </TableCell>
-            <TableCell>
-              <Button variant="contained" className={classes.button} onClick={showTag}>
-                Add Tag
-              </Button>
-            </TableCell>
-            <TableCell>
-              <Button variant="contained" className={classes.button} onClick={removeTag}>
-                Delete Tag
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
             <TableCell>Key</TableCell>
-            <TableCell align="right">Value</TableCell>
-            <TableCell align="right">Instances</TableCell>
-            <TableCell align="right">Volumes</TableCell>
+            <TableCell>Value</TableCell>
+            <TableCell>Instances</TableCell>
+            <TableCell>Volumes</TableCell>
+            <TableCell>Delete</TableCell>
           </TableRow>
-          {tags.map(tag => (
-            <TableRow key={tag.id}>
+        </TableHead>
+        <TableBody>
+          {tags.map((tag, idx) => (
+            <TableRow key={tag.key}>
               <TableCell>
                 <Typography>{tag.key}</Typography>
               </TableCell>
               <TableCell>
-                <Typography align="right">{tag.val}</Typography>
+                <Typography>{tag.value}</Typography>
               </TableCell>
-              <TableCell align="right">
-                <Checkbox />
+              <TableCell>
+                <Checkbox checked={tag.instance} />
               </TableCell>
-              <TableCell align="right">
-                <Checkbox />
+              <TableCell>
+                <Checkbox checked={tag.volume} />
+              </TableCell>
+              <TableCell>
+                <IconButton onClick={() => removeTag(idx)}>
+                  <DeleteIcon color="error" />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
-        </TableHead>
-        <TableBody />
+        </TableBody>
       </Table>
+      <Button onClick={saveTags} color="primary">
+        Save Tags
+      </Button>
     </Box>
   );
 }
