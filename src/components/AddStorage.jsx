@@ -18,6 +18,7 @@ import {
   IconButton
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 import STORAGES from '../static/storage.JSON';
 
@@ -76,14 +77,13 @@ export default function AddStorage() {
   };
 
   const handleRemove = tid => {
-    setStorages(oldForm =>
-      oldForm.map(f => {
-        if (f.id !== tid) {
-          return f;
-        }
-        return false;
-      })
-    );
+    setStorages(oldStorages => {
+      setForm(0);
+      return oldStorages.filter(f => f.id !== tid);
+    });
+    console.log(storages);
+    console.log(form);
+    setForm(0);
   };
 
   const newState = () => ({
@@ -128,12 +128,15 @@ export default function AddStorage() {
             </TableHead>
             <TableBody>
               {storages.map(storage => (
-                <TableRow key={storage.id} onClick={() => handleRowClick(storage.id - 1)} selected={form === storage.id - 1}>
+                <TableRow key={storage.id} selected={form === storage.id - 1}>
                   <TableCell align="left">
                     {storage.id}
                     {storage.rootEBS}
                     <IconButton onClick={() => handleRemove(storage.id)}>
                       <DeleteIcon color="error" />
+                    </IconButton>
+                    <IconButton onClick={() => handleRowClick(storage.id - 1)}>
+                      <ArrowForwardIcon color="primary" />
                     </IconButton>
                   </TableCell>
                 </TableRow>
