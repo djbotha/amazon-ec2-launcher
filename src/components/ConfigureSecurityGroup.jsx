@@ -68,11 +68,11 @@ function SelectOrNewGroup({ handleExisting, handleNew }) {
   const classes = useStyles();
   return (
     <Box>
-      <Button variant="contained" color="primary" className={classes.button} onClick={handleNew}>
-        New Security Group
-      </Button>
       <Button variant="contained" color="primary" className={classes.button} onClick={handleExisting}>
         Select Existing Group
+      </Button>
+      <Button variant="contained" color="primary" className={classes.button} onClick={handleNew}>
+        New Security Group
       </Button>
     </Box>
   );
@@ -90,12 +90,12 @@ function newRule(id) {
 }
 
 function NewGroup() {
-  const { dispatch } = useInstance();
+  const { state, dispatch } = useInstance();
   const [securityGroup, setSecurityGroup] = useState({
-    name: 'launch-wizard-1',
-    description: `launch-wizard-1 created ${new Date(Date.now()).toString()}`
+    name: (state && state.securityGroup && state.securityGroup.name) || 'launch-wizard-1',
+    description: (state && state.securityGroup && state.securityGroup.description) || `launch-wizard-1 created ${new Date(Date.now()).toString()}`
   });
-  const [rules, setRules] = useState([newRule(0)]);
+  const [rules, setRules] = useState((state && state.securityGroup && state.securityGroup.rules.length > 0 && state.securityGroup.rules) || [newRule(0)]);
 
   const classes = useStyles();
 
@@ -155,7 +155,7 @@ function NewGroup() {
         </TableHead>
         <TableBody>
           {rules.map((entry, idx) => (
-            <TableRow key={entry.id}>
+            <TableRow key={`${entry.portRange}${entry.protocol}${entry.cidrIp}`}>
               <TableCell>
                 <TextField
                   select
@@ -225,7 +225,7 @@ function NewGroup() {
   );
 }
 
-function SelectGroup() {
+function SelectGroup({ handleNext }) {
   const { dispatch } = useInstance();
   const [{ data, error, loading }] = useAPI('/securityGroups');
   const [{ data: detailedSG }, fetchSG] = useAPI(
@@ -241,8 +241,9 @@ function SelectGroup() {
   useEffect(() => {
     if (detailedSG && detailedSG.data) {
       dispatch({ type: 'SECURITY_GROUP', payload: { securityGroup: detailedSG.data } });
+      handleNext();
     }
-  }, [detailedSG, dispatch]);
+  }, [detailedSG, dispatch, handleNext]);
 
   if (loading) return <Loading />;
   if (error && error.message) return <Error error={error.message} />;
@@ -289,14 +290,14 @@ function SelectGroup() {
   );
 }
 
-function getStep(index, handleExisting, handleNew) {
+function getStep(index, handleExisting, handleNew, handleNext) {
   switch (index) {
     case 0:
       return <SelectOrNewGroup handleExisting={handleExisting} handleNew={handleNew} />;
     case 1:
-      return <NewGroup />;
+      return <SelectGroup handleNext={handleNext} />;
     case 2:
-      return <SelectGroup />;
+      return <NewGroup />;
     default:
       return null;
   }
@@ -308,7 +309,7 @@ export default function ConfigureSecurityGroup() {
   const [lastStep, setLastStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
-  const steps = ['New Or Existing Group', 'Create Security Group', 'Select Security Group'];
+  const steps = ['New Or Existing Group', 'Select Security Group', 'Create Security Group'];
 
   const handleNext = () => {
     setLastStep(activeStep);
@@ -320,13 +321,13 @@ export default function ConfigureSecurityGroup() {
     setLastStep(oldLastStep => (oldLastStep < activeStep ? oldLastStep - 1 : oldLastStep + 1));
   };
 
-  const handleNew = () => {
+  const handleExisting = () => {
     setLastStep(0);
     setActiveStep(1);
     setSkipped(new Set());
   };
 
-  const handleExisting = () => {
+  const handleNew = () => {
     setLastStep(0);
     setActiveStep(2);
     setSkipped(() => {
@@ -358,13 +359,13 @@ export default function ConfigureSecurityGroup() {
         })}
       </Stepper>
       <div className={classes.centered}>
-        {getStep(activeStep, handleExisting, handleNew)}
+        {getStep(activeStep, handleExisting, handleNew, handleNext)}
         <div className={classes.nav}>
           <Button disabled={activeStep === 0} onClick={handleBack}>
             Back
           </Button>
-          <Button variant="contained" color="primary" onClick={handleNext}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          <Button variant="contained" color="primary" onClick={handleNext} disabled={activeStep === steps.length - 1}>
+            Next
           </Button>
         </div>
       </div>
