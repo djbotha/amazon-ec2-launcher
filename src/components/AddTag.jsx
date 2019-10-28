@@ -49,9 +49,15 @@ const blankTag = () => ({
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   width: 100%;
   * {
     flex: 1;
+  }
+
+  button {
+    flex: 0.5;
+    height: 3rem;
   }
 `;
 
@@ -106,6 +112,14 @@ export default function AddTag() {
 
   return (
     <Box className={classes.fullWidth}>
+      <p>
+        A tag consists of a case-sensitive key-value pair. For example, you could define a tag with key = Name and value = Webserver. A copy of a tag can be applied to volumes,
+        instances or both. Tags will be applied to all instances and volumes.
+        <a href="https://docs.aws.amazon.com/console/ec2/tags"> Learn more </a>
+        about tagging your Amazon EC2 resources. Make sure your
+        <a href="https://docs.aws.amazon.com/console/ec2/launchinstance/tags/iam"> IAM policy </a>
+        includes permissions to create tags.
+      </p>
       <Row>
         <form noValidate autoComplete="off">
           <TextField
@@ -137,7 +151,7 @@ export default function AddTag() {
 
         <FormControlLabel control={<Checkbox checked={newTag.volume} onChange={handleToggle('volume')} />} label="Volumes" />
 
-        <Button variant="contained" className={classes.button} onClick={showTag}>
+        <Button className={classes.button} variant="contained" color="primary" onClick={showTag}>
           Add Tag
         </Button>
       </Row>
@@ -176,7 +190,7 @@ export default function AddTag() {
           ))}
         </TableBody>
       </Table>
-      <Button onClick={saveTags} color="primary">
+      <Button onClick={saveTags} className={classes.button} variant="contained" color="primary">
         Save Tags
       </Button>
     </Box>

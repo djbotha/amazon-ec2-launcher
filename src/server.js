@@ -304,10 +304,14 @@ apiApp.get('/securityGroups/:groupId', (req, res) => {
 // Get full list of basic "quickstart" AMIs
 // eg. http://localhost:8081/amis/quickstart
 apiApp.get('/amis/quickstart', (req, res) => {
+  // If `freeTierOnly` is specified and true, only show free tier-elegible AMIs
+  const freeTierOnly = req.query.freeTierOnly && req.query.freeTierOnly === 'true';
+  const quickstartAmisTemp = freeTierOnly ? quickstartAmis.filter(ami => ami.freeTier) : quickstartAmis;
+
   res.status(200).json({
     success: true,
-    numResults: quickstartAmis.length,
-    data: quickstartAmis
+    numResults: quickstartAmisTemp.length,
+    data: quickstartAmisTemp
   });
 });
 
@@ -315,6 +319,12 @@ apiApp.get('/amis/quickstart', (req, res) => {
 // eg. http://localhost:8081/amis/search/windows%20server?offset=0&limit=10
 apiApp.get('/amis/search/:searchQuery', (req, res) => {
   let results = fuseSearcher.search(req.params.searchQuery);
+
+  // If `freeTierOnly` is specified and true, only show free tier-elegible AMIs
+  if (req.query.freeTierOnly && req.query.freeTierOnly === 'true') {
+    results = results.filter(ami => ami.freeTier);
+  }
+
   const origResultsLength = results.length;
 
   // If `limit` and `offset` are specified for pagination, paginate

@@ -10,7 +10,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import styled from 'styled-components';
+import CheckIcon from '@material-ui/icons/Check';
+import { green } from '@material-ui/core/colors';
+import WarningIcon from '@material-ui/icons/Warning';
 import { startCase } from 'lodash';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import useAPI from '../hooks/useAPI';
 import { Titles, Fields, useInstance } from '../context/InstanceContext';
@@ -32,6 +36,9 @@ const useStyles = makeStyles({
     margin: '1rem auto',
     padding: '1rem',
     width: '100%'
+  },
+  progress: {
+    color: green[500]
   }
 });
 
@@ -111,6 +118,15 @@ export default function TemporaryDrawer({ open, setOpen }) {
       console.log(loading);
     }, [data, error, loading]);
 
+    const endIcon = (
+      <>
+        {loading && <CircularProgress size={68} className={classes.progress} />}
+        {data && data.success && <CheckIcon className={classes.progress} />}
+        {error && error.message && <WarningIcon color="error" />}
+        {!loading && !data && !error && <CheckCircleIcon />}
+      </>
+    );
+
     return (
       <div className={classes.list} role="presentation" onKeyDown={toggleDrawer(false)}>
         <List className={classes.grow}>
@@ -119,8 +135,8 @@ export default function TemporaryDrawer({ open, setOpen }) {
           ))}
         </List>
         <Divider />
-        <Button color="inherit" endIcon={<CheckCircleIcon color="secondary" />} onClick={launchInstance} className={classes.launch}>
-          Launch Instance
+        <Button color="inherit" endIcon={endIcon} onClick={launchInstance} className={classes.launch}>
+          {`Launch${data && data.success ? 'ed' : ''} Instance`}
         </Button>
       </div>
     );

@@ -34,16 +34,11 @@ const useStyles = makeStyles(theme => ({
 export default function ChooseAMI() {
   const [pagination, setPagination] = useState({
     limit: 9,
-    offset: 0
+    offset: 0,
+    freeTierOnly: false
   });
   const [amis, setAmis] = useState([]);
-  const [{ data: quickstartData }] = useAPI({
-    url: '/amis/quickstart',
-    params: {
-      offset: 0,
-      limit: 50
-    }
-  });
+  const [{ data: quickstartData }, refetchQuickstart] = useAPI('/amis/quickstart');
   const [{ data: searchedData, loading }, refetch] = useAPI(
     {
       url: '/amis/search',
@@ -54,7 +49,6 @@ export default function ChooseAMI() {
 
   const [numResults, setNumResults] = useState({});
   const [expandAll, setExpandAll] = useState(false);
-  const [freeTierOnly, setFreeTierOnly] = useState(false);
   const [search, setSearch] = useState('');
   const classes = useStyles();
 
@@ -63,12 +57,20 @@ export default function ChooseAMI() {
   };
 
   const handleFreeTier = e => {
-    setFreeTierOnly(e.target.checked);
+    setPagination({ ...pagination, freeTierOnly: e.target.checked });
   };
 
   useEffect(
     debounce(
       () => {
+        if (pagination.freeTierOnly && search.trim() === '') {
+          refetchQuickstart({
+            url: `/amis/quickstart`,
+            params: pagination
+          });
+          return;
+        }
+
         if (search.trim() === '' && quickstartData && quickstartData.data) {
           setAmis(quickstartData.data);
           setNumResults(quickstartData.data.length);
@@ -89,7 +91,7 @@ export default function ChooseAMI() {
   );
 
   useEffect(() => {
-    if (searchedData && searchedData.data && search.trim() !== '') {
+    if (searchedData && searchedData.data) {
       setAmis(searchedData.data);
       setNumResults(searchedData.numResults);
     } else if (quickstartData && quickstartData.data) {
@@ -100,6 +102,10 @@ export default function ChooseAMI() {
 
   return (
     <Box width="100%">
+      <p>
+        An AMI is a template that contains the software configuration (operating system, application server, and applications) required to launch your instance. You can select an
+        AMI provided by AWS, our user community, or the AWS Marketplace; or you can select one of your own AMIs.
+      </p>
       <form className={classes.container} noValidate autoComplete="off" onSubmit={e => e.preventDefault()}>
         <TextField
           id="outlined-search"
@@ -114,7 +120,7 @@ export default function ChooseAMI() {
       </form>
       <FormControlLabel control={<Switch checked={expandAll} onChange={handleExpand} value="expandAll" inputProps={{ 'aria-label': 'secondary checkbox' }} />} label="Expand All" />
       <FormControlLabel
-        control={<Switch checked={freeTierOnly} onChange={handleFreeTier} value="freeTierOnly" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
+        control={<Switch checked={pagination.freeTierOnly} onChange={handleFreeTier} value="freeTierOnly" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
         label="Free Tier Only"
       />
 
