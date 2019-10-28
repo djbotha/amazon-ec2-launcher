@@ -162,7 +162,7 @@ export default function AddStorage() {
 
           <HBox>
             <Label>Device:</Label>
-            {form !== 0 && (
+            {form !== 0 ? (
               <FormControl>
                 <InputLabel>Device</InputLabel>
                 <Select value={storages[form].deviceName} onChange={e => handleChange(e, 'deviceName')}>
@@ -179,8 +179,9 @@ export default function AddStorage() {
                   <MenuItem value="/dev/sdl">/dev/sdl</MenuItem>
                 </Select>
               </FormControl>
+            ) : (
+              <Typography>/dev/xvda</Typography>
             )}
-            {form === 0 && <Typography>/dev/xvda</Typography>}
           </HBox>
 
           <HBox>
