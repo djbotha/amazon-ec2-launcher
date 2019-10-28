@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Checkbox, FormControl, InputLabel, Select, MenuItem, TextField } from '@material-ui/core';
+import {
+  Button,
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Checkbox,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  IconButton
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import STORAGES from '../static/storage.JSON';
 
@@ -13,19 +30,19 @@ const LeftPanel = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 2rem;
-  width: 40%;
+  flex: 1;
 `;
 
 const RightPanel = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
+  flex: 2;
 `;
 
 const HBox = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 1rem;
+  margin-left: 1rem;
   align-items: center;
   text-align: left;
 `;
@@ -41,6 +58,12 @@ export default function AddStorage() {
   const handleChange = (e, field) => {
     setStorages(oldForm =>
       oldForm.map(f => {
+        if (f.id - 1 === form && field === 'DeleteOnTermination') {
+          return {
+            ...f,
+            [field]: e.target.checked
+          };
+        }
         if (f.id - 1 === form) {
           return {
             ...f,
@@ -50,6 +73,35 @@ export default function AddStorage() {
         return f;
       })
     );
+  };
+
+  const handleRemove = tid => {
+    setStorages(oldForm =>
+      oldForm.map(f => {
+        if (f.id !== tid) {
+          return f;
+        }
+        return false;
+      })
+    );
+  };
+
+  const newState = () => ({
+    id: storages.length + 1,
+    rootEBS: 'EBS',
+    Device: '',
+    Snapshot: '',
+    Size: '8',
+    VolumeType: 'General Purpose SSD (gp2)',
+    IOPS: '100/3000',
+    Throughput: 'N/A',
+    DeleteOnTermination: false,
+    Encryption: 'Not Encrypted'
+  });
+
+  const handleAdd = () => {
+    setStorages([...storages, newState()]);
+    setForm(storages.length);
   };
 
   const handleRowClick = index => {
@@ -77,12 +129,18 @@ export default function AddStorage() {
             <TableBody>
               {storages.map(storage => (
                 <TableRow key={storage.id} onClick={() => handleRowClick(storage.id - 1)} selected={form === storage.id - 1}>
-                  <TableCell align="left">{storage.id}</TableCell>
-                  <TableCell align="left">{storage.rootEBS}</TableCell>
+                  <TableCell align="left">
+                    {storage.id}
+                    {storage.rootEBS}
+                    <IconButton onClick={() => handleRemove(storage.id)}>
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          <Button onClick={() => handleAdd()}>Add New Volume</Button>
         </LeftPanel>
 
         <RightPanel>
@@ -96,7 +154,7 @@ export default function AddStorage() {
             {form !== 0 && (
               <FormControl>
                 <InputLabel>Device</InputLabel>
-                <Select value={storages[form].device} onChange={e => handleChange(e, 'Device')}>
+                <Select value={storages[form].Device} onChange={e => handleChange(e, 'Device')}>
                   <MenuItem value="/dev/sdb">/dev/sdb</MenuItem>
                   <MenuItem value="/dev/sdc">/dev/sdc</MenuItem>
                   <MenuItem value="/dev/sdd">/dev/sdd</MenuItem>
@@ -121,7 +179,7 @@ export default function AddStorage() {
 
           <HBox>
             <Label>Size:</Label>
-            <TextField value={storages[form].Size} onChange={e => handleChange(e, 'Size')} type="number" />
+            <TextField value={storages[form].Size || 0} onChange={e => handleChange(e, 'Size')} type="number" />
           </HBox>
 
           <HBox>
@@ -150,7 +208,7 @@ export default function AddStorage() {
 
           <HBox>
             <Label>Delete on termination:</Label>
-            <Checkbox onChange={e => handleChange(e, 'DeleteOnTermination')} value={!!storages[form].DeleteOnTermination} />
+            <Checkbox onChange={e => handleChange(e, 'DeleteOnTermination')} value={!!storages[form].DeleteOnTermination} checked={!!storages[form].DeleteOnTermination} />
           </HBox>
 
           <HBox>
@@ -159,7 +217,7 @@ export default function AddStorage() {
               <InputLabel>Encryption</InputLabel>
               <Select value={storages[form].Encryption} onChange={e => handleChange(e, 'Encryption')}>
                 <MenuItem value="Not Encrypted">Not Encrypted</MenuItem>
-                <MenuItem value="(default) aws/ebs">(default) aws/ebs</MenuItem>
+                <MenuItem value="alias/aws/ebs">(default) aws/ebs</MenuItem>
               </Select>
             </FormControl>
           </HBox>
