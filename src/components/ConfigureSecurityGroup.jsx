@@ -339,6 +339,13 @@ export default function ConfigureSecurityGroup() {
 
   return (
     <div className={classes.root}>
+      <p>
+        A security group is a set of firewall rules that control the traffic for your instance. On this page, you can add rules to allow specific traffic to reach your instance.
+        For example, if you want to set up a web server and allow Internet traffic to reach your instance, add rules that allow unrestricted access to the HTTP and HTTPS ports. You
+        can create a new security group or select from an existing one below.
+        <a href="https://docs.aws.amazon.com/console/ec2/security-groups"> Learn more </a>
+        about Amazon EC2 security groups.
+      </p>
       <Stepper activeStep={activeStep}>
         {steps.map((label, idx) => {
           const stepProps = {};

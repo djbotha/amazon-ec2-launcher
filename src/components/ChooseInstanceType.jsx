@@ -56,6 +56,12 @@ export default function ChooseInstanceType() {
   if (loading) return <Loading />;
   return (
     <Box>
+      <p>
+        Amazon EC2 provides a wide selection of instance types optimized to fit different use cases. Instances are virtual servers that can run applications. They have varying
+        combinations of CPU, memory, storage, and networking capacity, and give you the flexibility to choose the appropriate mix of resources for your applications.
+        <a href="https://aws.amazon.com/ec2/instance-types/"> Learn more</a>
+        about instance types and how they can meet your computing needs.
+      </p>
       <Select value={family} onChange={e => setFamily(e.target.value)} name="family">
         <MenuItem value="All">All instance families</MenuItem>
         <MenuItem value="Compute Instance">Compute Instance</MenuItem>
