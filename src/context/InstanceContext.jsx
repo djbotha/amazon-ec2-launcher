@@ -184,7 +184,7 @@ function reducer(state, action) {
  * @param {object} props Additional props that are passed to this funciton
  */
 function InstanceProvider(props) {
-  const [state, dispatch] = useReducer(reducer, {}); // Our default selected values go in this empty object in the second parameter.
+  const [state, dispatch] = useReducer(reducer, defaultState); // Our default selected values go in this empty object in the second parameter.
   return <InstanceContext.Provider value={{ state, dispatch }} {...props} />;
 }
 
