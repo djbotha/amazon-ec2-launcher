@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import styled from 'styled-components';
+import { startCase } from 'lodash';
 
 import useAPI from '../hooks/useAPI';
 import { Titles, Fields, useInstance } from '../context/InstanceContext';
@@ -49,9 +50,9 @@ function RowItem({ handleClick, name, value }) {
   if (Fields[name] === '') {
     items = <ListItemText primary={value} />;
   } else if (Array.isArray(value)) {
-    items = value.map(val => Fields[name].map(field => <ListItemText primary={val[field]} secondary={field} />));
+    items = value.map(val => Fields[name].map(field => <ListItemText primary={`${val[field]}`} secondary={startCase(field)} />));
   } else {
-    items = Fields[name].map(field => <ListItemText primary={value[field]} secondary={field} />);
+    items = Fields[name].map(field => <ListItemText primary={`${value[field]}`} secondary={startCase(field)} />);
   }
 
   return (
