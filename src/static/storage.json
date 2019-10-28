@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "rootEBS": "root",
+    "deviceName": "/dev/xvda",
+    "Snapshot": "snap-0e4c15b8cba3e8ae6",
+    "size": "8",
+    "type": "gp2",
+    "IOPS": "100/3000",
+    "Throughput": "N/A",
+    "deleteOnTermination": true,
+    "Encryption": "alias/aws/ebs"
+  },{
+    "id": 2,
+    "rootEBS": "EBS",
+    "deviceName": "/dev/sdb",
+    "Snapshot": "snap-0a10d59c737c18419",
+    "size": "10",
+    "type": "io1",
+    "IOPS": "57500",
+    "Throughput": "N/A",
+    "deleteOnTermination": true,
+    "Encryption": "Not Encrypted"
+  },{
+    "id": 3,
+    "rootEBS": "EBS",
+    "deviceName": "/dev/sdf",
+    "Snapshot": "snap-02231e603ec9b5179",
+    "size": "20",
+    "type": "sc1",
+    "IOPS": "N/A",
+    "Throughput": "14/90",
+    "deleteOnTermination": false,
+    "Encryption": "Not Encrypted"
+  },{
+    "id": 4,
+    "rootEBS": "EBS",
+    "deviceName": "/dev/sdg",
+    "Snapshot": "snap-39941fad",
+    "size": "4",
+    "type": "st1",
+    "IOPS": "N/A",
+    "Throughput": "45/281",
+    "deleteOnTermination": false,
+    "Encryption": "alias/aws/ebs"
+  }
+]
