@@ -63,6 +63,14 @@ function reducer(state, action) {
         volumes
       };
     }
+    case 'REMOVE': {
+      const { key } = action.payload;
+      const newState = state;
+      delete newState[key];
+      return {
+        ...newState
+      };
+    }
     default:
       return state;
   }
