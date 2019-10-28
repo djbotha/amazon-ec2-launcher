@@ -51,7 +51,11 @@ GET `/amis/quickstart`
 
 Gets a list of common "quickstart" AMIs, to be shown by default in the AMI list without a search query.
 
+Only free tier-elegible AMIs can be shown by specifying the `freeTierOnly=true` query parameter and value.
+
 #### Example
+
+Show all quickstart AMIs:
 
 Request: [http://localhost:8081/amis/quickstart](http://localhost:8081/amis/quickstart)
 
@@ -80,16 +84,24 @@ Response (excerpt, 38 other results skipped):
 }
 ```
 
+Show free-tier elegible quickstart AMIs:
+
+Request: [http://localhost:8081/amis/quickstart?freeTierOnly=true](http://localhost:8081/amis/quickstart?freeTierOnly=true)
+
+(result is just a subset of the previous result)
+
 ### Search AMIs
 
 GET `/amis/search/<SEARCHTERM>?offset=<OFFSET>&limit=<LIMIT>`
 
 Returns AMIs for a particular search query. A fuzzy search takes place on the AMI name, description and ID fields, and pagination can be used by specifying `offset` and `limit` query parameters.
 
+Only free tier-elegible AMIs can be shown by specifying the `freeTierOnly=true` query parameter and value.
+
 #### Examples
 
 - List all AMIs with search query `ubuntu 18.04` (Note the URL encoding!): [http://localhost:8081/amis/search/ubuntu%2018.04](http://localhost:8081/amis/search/ubuntu%2018.04)
-- List first `10` AMIs with search query `windows server`: [http://localhost:8081/amis/search/windows%20server?offset=0&limit=10](http://localhost:8081/amis/search/windows%20server?offset=0&limit=10)
+- List first `10` free tier-elegible AMIs with search query `windows server`: [http://localhost:8081/amis/search/windows%20server?offset=0&limit=10&freeTierOnly=true](http://localhost:8081/amis/search/windows%20server?offset=0&limit=10&freeTierOnly=true)
 - List `50` AMIs with search query `windows server`, starting at index `100`: [http://localhost:8081/amis/search/windows%20server?offset=100&limit=50](http://localhost:8081/amis/search/windows%20server?offset=100&limit=50)
 
 
@@ -306,6 +318,7 @@ For each volume, the `type` field can be:
 #### Example
 
 Request: [http://localhost:8081/launchInstance](http://localhost:8081/launchInstance)
+
 POST Body (`application/json`):
 ```
 {
