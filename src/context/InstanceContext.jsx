@@ -6,9 +6,9 @@ const InstanceContext = createContext();
 const defaultState = {
   instanceType: 't2.micro',
   imageId: 'ami-00a1270ce1e007c27',
-  keypairName: 'EC2_keypair',
+  keypairName: 'sag-weekly-challenge',
   securityGroup: {
-    name: 'new-instance-security-group',
+    name: `new-instance-security-group-${Date.now()}`,
     description: 'Test of API',
     rules: [
       {
