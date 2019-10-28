@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Table, TableHead, TableRow, TableCell, Typography, TableBody, IconButton } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
@@ -11,8 +11,6 @@ import Error from './common/Error';
 function KeyPairs() {
   const { dispatch } = useInstance();
   const [{ data, error, loading }] = useAPI('/keyPairs');
-
-  useEffect(() => {}, [dispatch]);
 
   if (loading) return <Loading />;
   if (error && error.message) return <Error error={error.message} />;
