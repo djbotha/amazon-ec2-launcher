@@ -2,9 +2,22 @@
 
 ## IMPORTANT TOOLS
 
-This project is based on React [React](https://reactjs.org), and makes use of [styled-components](https://styled-components.com/docs/api) for defining CSS in the same place as the components. [Next.js](https://nextjs.org/docs) is used for server-side rendering and directory-based routing structure, and linting is done with [ESLint](https://eslint.org/), using the Airbnb styleguide.
+This project is based on [React](https://reactjs.org), and makes use of [styled-components](https://styled-components.com/docs/api) for defining CSS in the same place as the components. [Next.js](https://nextjs.org/docs) is used for server-side rendering and directory-based routing structure, and linting is done with [ESLint](https://eslint.org/), using the Airbnb styleguide.
 
 Make sure you have Docker and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
+
+## SETTING-UP IAM USER
+
+An IAM user with appropriate roles is required to use the AWS APIs for the Launch Wizard. We will use the user's access key and secret when making API requests.
+
+1. Head over to the [IAM section](https://console.aws.amazon.com/iam/home) in the EC2 Console.
+2. Navigate to the _Users_ option and select _Add User_.
+3. Enter an appropriate username and allow _Programmatic access_.
+4. Under _Set Permissions_, select the _Attach existing policies directly_ option and choose the following policy names:
+   - `AmazonEC2FullAccess`
+   - `AWSPriceListServiceFullAccess`
+5. Skip the next few steps and finish creating the user.
+6. Note the generated `Access key ID` and `Secret access key`, which will be required in the `.env` file as explained below.
 
 ## SETTING-UP LOCALLY
 
@@ -16,12 +29,35 @@ git clone git@github.com:djbotha/amazon-ec2-launcher.git
 
 2.  Get started
 
+Create a file called `.env` in the project root and add the below two lines, replacing the
+placeholders with your IAM user's `Access key ID` and `Secret access key` as obtained above.
+_Be sure to keep this file outside of version control!_
+
 ```
-cd amazon-ec2-launcher
-docker-compose up
+REGION=eu-west-2
+API_SERVER_PREFIX=http://localhost
+ACCESS_KEY_ID=<Your access key ID>
+SECRET_ACCESS_KEY=<Your secret access key>
+```
+
+To launch the project, run:
+
+```
+npm install
+npm run dev
+```
+
+To run the collector to collect information on all instance types, run:
+
+```
+npm run collector
 ```
 
 You should see the landing page running at http://localhost:8080. Any changes you make to your local code should also be updated inside the Docker container, and the page will be hot-reloaded thanks to NextJS.
+
+## API Documentation
+
+Documentation for our API gateway is available at [API_Documentation.md](API_Documentation.md).
 
 ## CODE STYLE
 

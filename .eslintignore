@@ -1,4 +1,4 @@
 src/.next
 src/static
 node_modules
-
+!.eslintrc.js

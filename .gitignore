@@ -1,5 +1,8 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# .env file containing key/secret
+.env
+
 # dependencies
 **/node_modules
 
@@ -17,3 +20,4 @@ yarn-error.log*
 # Next.js
 **/.next
 **/out
+.vscode/
