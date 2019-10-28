@@ -9,9 +9,10 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import styled from 'styled-components';
 
 import useAPI from '../hooks/useAPI';
-import { useInstance } from '../context/InstanceContext';
+import { Titles, Fields, useInstance } from '../context/InstanceContext';
 
 const useStyles = makeStyles({
   list: {
@@ -32,6 +33,39 @@ const useStyles = makeStyles({
     width: '100%'
   }
 });
+
+const Left = styled.div`
+  flex: 1;
+`;
+
+const Title = styled.p`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+function RowItem({ handleClick, name, value }) {
+  let items = null;
+
+  if (Fields[name] === '') {
+    items = <ListItemText primary={value} />;
+  } else if (Array.isArray(value)) {
+    items = value.map(val => Fields[name].map(field => <ListItemText primary={val[field]} secondary={field} />));
+  } else {
+    items = Fields[name].map(field => <ListItemText primary={value[field]} secondary={field} />);
+  }
+
+  return (
+    <ListItem button>
+      <Left>
+        <Title>{Titles[name]}</Title>
+        {items}
+      </Left>
+      <IconButton onClick={handleClick}>
+        <DeleteIcon color="error" />
+      </IconButton>
+    </ListItem>
+  );
+}
 
 export default function TemporaryDrawer({ open, setOpen }) {
   const classes = useStyles();
@@ -80,12 +114,7 @@ export default function TemporaryDrawer({ open, setOpen }) {
       <div className={classes.list} role="presentation" onKeyDown={toggleDrawer(false)}>
         <List className={classes.grow}>
           {fields.map(key => (
-            <ListItem button key={key}>
-              <ListItemText primary={`${key} : ${JSON.stringify(state[key])}`} className={classes.grow} />
-              <IconButton onClick={() => removeElement(key)}>
-                <DeleteIcon color="error" />
-              </IconButton>
-            </ListItem>
+            <RowItem key={key} handleClick={() => removeElement(key)} name={key} value={state[key]} />
           ))}
         </List>
         <Divider />
